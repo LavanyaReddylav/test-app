@@ -1,0 +1,141 @@
+<!-- Login Screen -->
+<div fxLayout *ngIf="show">
+    <div id="login-img" fxLayout="column" fxLayoutAlign="center start">
+        <p>Welcome to Usha LASM ! Created by Infield Infotech.</p>
+    </div>
+    <div id="login-form" fxLayoutAlign="center center">
+        <mat-card class="mat-elevation-z3">
+            <div id="signin-title" fxLayout fxLayoutAlign="center center">
+                <h3 *ngIf="!showSpinner">Signin</h3>
+                <mat-spinner *ngIf="showSpinner" [diameter]="50"></mat-spinner>
+            </div>
+            <br>
+            <div fxLayoutAlign="center center">
+                <form [formGroup]="loginForm">
+                    <!-- username -->
+                    <div>
+                        <mat-form-field>
+                            <input matInput type="text" placeholder="LoginId" formControlName="loginid">
+                            <mat-icon matSuffix>account_circle</mat-icon>
+                            <button mat-button *ngIf="loginForm.get('loginid').value" matSuffix mat-icon-button (click)="loginForm.get('loginid').setValue('')">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                            <mat-error *ngIf="loginForm.get('loginid').hasError('required')">
+                                Loginid is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <!-- Password -->
+                    <div>
+                        <mat-form-field>
+                            <input matInput type="password" placeholder="Password" formControlName="password">
+                            <mat-icon matSuffix>fingerprint</mat-icon>
+                            <button mat-button *ngIf="loginForm.get('password').value" matSuffix mat-icon-button
+                                (click)="loginForm.get('password').setValue('')">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                            <mat-error *ngIf="loginForm.get('password').hasError('required')">
+                                Password is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <!-- Signin Button -->
+                    <div>
+                        <button id="signin-button" mat-raised-button color="primary" (click)="loginFormSubmit()">Signin</button>
+                    </div>
+                    <br>
+                    <br>
+                </form>
+            </div>
+            <!-- Forgot Password -->
+            <div id="forgot-password" fxLayout fxLayoutAlign="end">
+                <h5 (click)="showForgotpassword()">Forgot password?</h5>
+            </div>
+            <!-- Invalid Credentials -->
+            <div id="invalid-credential" fxLayout fxLayoutAlign="start" *ngIf="invalidCredentials">
+                <h5>{{status}} &nbsp; {{error}} &nbsp; Invalid Credentials.</h5>
+            </div>
+        </mat-card>
+    </div>
+</div>
+<!-- Forgot PASSWORD -->
+<div fxLayout *ngIf="!show">
+    <div id="login-img"></div>
+    <div id="login-form" fxLayoutAlign="center center">
+        <mat-card class="mat-elevation-z3">
+            <div id="signin-title" fxLayout fxLayoutAlign="center center">
+                <h3 *ngIf="!showSpinner">Enter Your Details</h3>
+                <mat-spinner *ngIf="showSpinner" [diameter]="50"></mat-spinner>
+            </div>
+            <br>
+            <div fxLayoutAlign="center center">
+                <form [formGroup]="forgotPasswordForm">
+                    <!-- username -->
+                    <div>
+                        <mat-form-field>
+                            <input matInput type="text" placeholder="LoginId" formControlName="loginid">
+                            <mat-icon matSuffix>account_circle</mat-icon>
+                            <button mat-button *ngIf="forgotPasswordForm.get('loginid').value" matSuffix
+                                mat-icon-button (click)="forgotPasswordForm.get('loginid').setValue('')">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                            <mat-error *ngIf="forgotPasswordForm.get('loginid').hasError('required')">
+                                Loginid is <strong>required</strong>
+                            </mat-error>
+                        </mat-form-field>
+                    </div>
+                    <!-- email -->
+                    <div>
+                        <mat-form-field>
+                            <input matInput type="text" placeholder="Email" formControlName="email" [errorStateMatcher]="matcher">
+                            <mat-icon matSuffix>email</mat-icon>
+                            <button mat-button *ngIf="forgotPasswordForm.get('email').value" matSuffix mat-icon-button
+                                (click)="forgotPasswordForm.get('email').setValue('')">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                            <!-- <mat-error *ngIf="forgotPasswordForm.get('email').hasError('required')">
+                                Email is <strong>required</strong>
+                            </mat-error>
+                            <mat-error *ngIf="forgotPasswordForm.get('email').hasError('email') && !forgotPasswordForm.get('email').hasError('required')">
+                                Email is not <strong>valid</strong>
+                            </mat-error> -->
+                        </mat-form-field>
+                    </div>
+                    <!-- mobile -->
+                    <!-- <div>
+                        <mat-form-field>
+                            <input matInput type="text" placeholder="Mobile" formControlName="mobile"
+                                [errorStateMatcher]="matcher">
+                            <mat-icon matSuffix>phone</mat-icon>
+                            <button mat-button *ngIf="forgotPasswordForm.get('mobile').value" matSuffix mat-icon-button
+                                (click)="forgotPasswordForm.get('mobile').setValue('')">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                            <mat-error *ngIf="forgotPasswordForm.get('mobile').hasError('required')">
+                                Mobile is <strong>required</strong>
+                            </mat-error>
+                            <mat-error *ngIf="forgotPasswordForm.get('mobile').hasError('minlength') || forgotPasswordForm.get('mobile').hasError('maxlength')">
+                                Mobile is not <strong>valid</strong>
+                            </mat-error>
+                        </mat-form-field>
+                    </div> -->
+                    <!-- Send Button -->
+                    <div>
+                        <button id="signin-button" mat-raised-button color="primary" (click)="forgotPasswordFormSubmit()"
+                            [disabled]="!forgotPasswordForm.valid">Send</button>
+                    </div>
+                    <br>
+                    <br>
+                </form>
+            </div>
+            <!-- Forgot Password -->
+            <div id="forgot-password" fxLayout fxLayoutAlign="end">
+                <h5 (click)="showForgotpassword()">Signin</h5>
+            </div>
+            <!-- Invalid Credentials -->
+            <div id="invalid-loginid" fxLayout fxLayoutAlign="start" *ngIf="invalidLoginid">
+                <h5>{{status}} &nbsp; {{error1}} &nbsp;Password Reset failed</h5>
+            </div>
+        </mat-card>
+    </div>
+</div>

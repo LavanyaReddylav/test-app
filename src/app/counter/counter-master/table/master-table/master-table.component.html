@@ -1,0 +1,186 @@
+<div fxLayout fxLayoutAlign="space-between center">
+  <!-- Search Filter -->
+  <div>
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
+
+  <!-- Show Selected Counters -->
+  <div *ngIf="selection.hasValue()" class="selected">
+    {{selection.selected.length}} {{selection.selected.length == 1 ? 'Counter' : 'Counters'}} selected
+  </div>
+  <!-- Action menu list -->
+  <div *ngIf="selection.hasValue()">
+    <button mat-icon-button [matMenuTriggerFor]="menu" (click)="selectCounters()">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item class="mat-menu-item" (click)="mapBeat()">
+        <mat-icon>timeline</mat-icon>
+        <span>Map Beat</span>
+      </button>
+      <button mat-menu-item class="mat-menu-item" (click)="mapDistributor()">
+        <mat-icon>exit_to_app</mat-icon>
+        <span>Map Distributor</span>
+      </button>
+      <button mat-menu-item class="mat-menu-item" (click)="addMSM()">
+        <mat-icon>mobile_friendly</mat-icon>
+        <span>Add MSM</span>
+      </button>
+      <button mat-menu-item class="mat-menu-item" (click)="activateCounters(true)">
+        <mat-icon>visibility</mat-icon>
+        <span>Activate</span>
+      </button>
+      <button mat-menu-item class="mat-menu-item" (click)="activateCounters(false)">
+        <mat-icon>visibility_off</mat-icon>
+        <span>Deactivate</span>
+      </button>
+      <button mat-menu-item class="mat-menu-item" (click)="deleteCounters()">
+        <mat-icon>delete_outline</mat-icon>
+        <span>Delete</span>
+      </button>
+      <button mat-menu-item class="mat-menu-item" (click)="removeBeatMapping()">
+        <mat-icon>remove_circle_outline</mat-icon>
+        <span>Remove beat Mapping</span>
+      </button>
+    </mat-menu>
+  </div>
+</div>
+
+<div class="mat-elevation-z3">
+  <table mat-table [dataSource]="dataSource" multiTemplateDataRows matSort>
+
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue() && !isAllSelected()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <!-- sap code -->
+    <ng-container matColumnDef="sap_code">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Counter</th>
+      <td mat-cell *matCellDef="let row"> {{row.sap_code}} </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+      <td mat-cell *matCellDef="let row"> {{row.name | titlecase}} </td>
+    </ng-container>
+
+    <!-- Sales Office  Column -->
+    <ng-container matColumnDef="sales_office">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Sales Office </th>
+      <td mat-cell *matCellDef="let row"> {{row.sales_office}} </td>
+    </ng-container>
+
+    <!-- Gtm City Column -->
+    <ng-container matColumnDef="gtm_city">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Gtm City </th>
+      <td mat-cell *matCellDef="let row"> {{row.gtm_city}} </td>
+    </ng-container>
+
+    <!-- Division Column -->
+    <ng-container matColumnDef="division">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Division </th>
+      <td mat-cell *matCellDef="let row"> {{row.division}} </td>
+    </ng-container>
+
+    <!-- Distribution Channel Column -->
+    <ng-container matColumnDef="dc">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Distribution Channel </th>
+      <td mat-cell *matCellDef="let row"> {{row.dc}} </td>
+    </ng-container>
+
+    <!-- Distributor -->
+    <ng-container matColumnDef="distributor">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Distributor </th>
+      <td mat-cell *matCellDef="let row"> {{row.distributor}} </td>
+    </ng-container>
+
+    <!-- Active  -->
+    <ng-container matColumnDef="active">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Active </th>
+      <td mat-cell *matCellDef="let row"> {{row.active}} </td>
+    </ng-container>
+
+    <!-- PAN Number -->
+    <ng-container matColumnDef="pan_number">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>PAN Number </th>
+      <td mat-cell *matCellDef="let row"> {{row.pan_number}} </td>
+    </ng-container>
+
+    <!-- GST Number -->
+    <ng-container matColumnDef="gst_number">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>GST Number </th>
+      <td mat-cell *matCellDef="let row"> {{row.gst_number}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let row" [attr.colspan]="displayedColumns.length">
+        <div fxLayout fxLayoutAlign="center" class="example-element-detail" [@detailExpand]="row == expandedElement ? 'expanded' : 'collapsed'">
+          <div fxLayout>
+            <div class="counter-address mat-elevation-z3">
+              <h3>Address</h3>
+              <div>
+                <mat-list>
+                  <mat-list-item>
+                    <mat-icon matListIcon>store</mat-icon>
+                    <h5> SCO : {{row.address.sco}} </h5>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <mat-icon matListIcon>location_city</mat-icon>
+                    <h5> Locality : {{row.address.locality}} </h5>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <mat-icon matListIcon>room</mat-icon>
+                    <h5> Pincode : {{row.address.pincode}} </h5>
+                  </mat-list-item>
+                </mat-list>
+              </div>
+            </div>
+            <div class="counter-timings mat-elevation-z3">
+              <h3>Timings</h3>
+              <div>
+                <mat-list>
+                  <mat-list-item>
+                    <mat-icon matListIcon>schedule</mat-icon>
+                    <h5>Opening Time : {{row.opening_time}} </h5>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <mat-icon matListIcon>access_time</mat-icon>
+                    <h5> Closing Time : {{row.closing_time}} </h5>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <mat-icon matListIcon>weekend</mat-icon>
+                    <h5> Weekly Off : {{row.weekly_off}} </h5>
+                  </mat-list-item>
+                </mat-list>
+              </div>
+            </div>
+            <div class="counter-image mat-elevation-z3">
+              <img src="{{row.image}}" alt="image">
+            </div>
+          </div>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="expandedElement = row" class="example-element-row">
+    </tr>
+    <tr mat-row *matRowDef="let element; columns: ['expandedDetail']" class="example-detail-row"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+
+</div>

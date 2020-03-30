@@ -1,0 +1,51 @@
+<div fxFill fxLayout="column" fxLayoutAlign="center center" fxLayoutGap="20px">
+
+    <h1>Raise an Issue</h1>
+
+    <canvas #canvas width="500" height="280"> </canvas>
+
+    <form [formGroup]="form">
+        <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="5rem">
+            <div>
+                <mat-form-field>
+                    <mat-label>Type</mat-label>
+                    <mat-select [value]="type" formControlName="type">
+                        <mat-option [value]="s" *ngFor="let s of type">
+                            {{s}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div>
+                <mat-form-field class="mat-form-field-class">
+                    <input matInput placeholder="Remarks" formControlName="remarks">
+                </mat-form-field>
+            </div>
+        </div>
+        <br>
+        <div fxLayout="row" fxLayoutAlign="space-between" fxLayoutGap="1rem">
+            <div>
+                <td-file-upload #singleFileUpload [(ngModel)]="files" [ngModelOptions]="{standalone: true}" (select)="selectEvent($event)"
+                    (change)="uploadEvent($event)" (cancel)="cancelEvent()" defaultColor="primary" activeColor="primary"
+                    cancelColor="warn" multiple required [disabled]="!form.valid">
+                    <mat-icon>file_upload</mat-icon>
+                    <ng-template td-file-input-label>
+                        <mat-icon>attach_file</mat-icon>
+                        <span>
+                            <span [hidden]="!singleFileUpload?.required"></span>
+                        </span>
+                    </ng-template>
+                </td-file-upload>
+                <br>
+            </div>
+            <!-- <mat-progress-bar mode="indeterminate" style="height:0.3rem; max-width: 50%;"> -->
+            <!-- </mat-progress-bar> -->
+            <div>
+                <button type="submit" mat-raised-button class="theme_btn" [disabled]="!form.valid" (click)="onSubmit()">Submit</button>
+            </div>
+        </div>
+    </form>
+    <span>{{ singleFileUpload.value?.name || singleFileUpload.value?.length }}<span *ngIf="singleFileUpload.value?.length">&nbsp;files
+            selected</span></span>
+    <p>{{fileSelectMultipleMsg}}</p>
+</div>

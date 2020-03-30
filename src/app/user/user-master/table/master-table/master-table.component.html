@@ -1,0 +1,117 @@
+<div fxLayout fxLayoutAlign="space-between center">
+  <!-- Search Filter -->
+  <div>
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
+  <!-- Show Selected Users -->
+  <div *ngIf="selection.hasValue()" class="selected">
+    {{selection.selected.length}} {{selection.selected.length == 1 ? 'User' : 'Users'}} selected
+  </div>
+  <!-- Action Menu list -->
+  <div *ngIf="selection.hasValue()">
+    <button mat-icon-button [matMenuTriggerFor]="menu" (click)="selectUsers()">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item class="mat-menu-item" (click)="activateUsers(true)">
+        <mat-icon>how_to_reg</mat-icon>
+        <span>Activate</span>
+      </button>
+      <button mat-menu-item class="mat-menu-item" (click)="activateUsers(false)">
+        <mat-icon>person_add_disabled</mat-icon>
+        <span>Deactivate</span>
+      </button>
+    </mat-menu>
+  </div>
+</div>
+<div class="mat-elevation-z3">
+  <table mat-table [dataSource]="dataSource" matSort multiTemplateDataRows="true">
+
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue() && !isAllSelected()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+          [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+      <td mat-cell *matCellDef="let row"> {{row.name | titlecase}} </td>
+    </ng-container>
+
+    <!-- mobile Column -->
+    <ng-container matColumnDef="mobile">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Mobile </th>
+      <td mat-cell *matCellDef="let row"> {{row.mobile}} </td>
+    </ng-container>
+
+    <!-- user status Column -->
+    <ng-container matColumnDef="active">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> User Status </th>
+      <td mat-cell *matCellDef="let row"> {{row.active}} </td>
+    </ng-container>
+    <!-- Loginid Column-->
+    <ng-container matColumnDef="loginid">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Loginid </th>
+      <td mat-cell *matCellDef="let row"> {{row.loginid}} </td>
+    </ng-container>
+    <!-- Role -->
+    <!-- <ng-container matColumnDef="role">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Role </th>
+      <td mat-cell *matCellDef="let row"> {{row.role}} </td>
+    </ng-container> -->
+    <!-- Sales Office -->
+    <ng-container matColumnDef="sales_office">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Sales Office </th>
+      <td mat-cell *matCellDef="let row"> {{row.sales_office}} </td>
+    </ng-container>
+    <!-- Gtm City -->
+    <ng-container matColumnDef="gtm_city">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Gtm City </th>
+      <td mat-cell *matCellDef="let row"> {{row.gtm_city }} </td>
+    </ng-container>
+    <!-- Division -->
+    <ng-container matColumnDef="division">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Division </th>
+      <td mat-cell *matCellDef="let row"> {{row.division}} </td>
+    </ng-container>
+    <!-- DC -->
+    <ng-container matColumnDef="dc">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> DC </th>
+      <td mat-cell *matCellDef="let row"> {{row.dc }} </td>
+    </ng-container>
+    <!-- Weeklt Off -->
+    <ng-container matColumnDef="weekly_off">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Weekly Off </th>
+      <td mat-cell *matCellDef="let row"> {{row.weekly_off}} </td>
+    </ng-container>
+    <!-- Joining Date -->
+    <ng-container matColumnDef="joining_date">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Joining Date </th>
+      <td mat-cell *matCellDef="let row"> {{row.joining_date|date: 'dd/MM/yyyy'}} </td>
+    </ng-container>
+    <!-- Joining Date -->
+    <ng-container matColumnDef="emp_code">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Emp Code </th>
+      <td mat-cell *matCellDef="let row"> {{row.emp_code}} </td>
+    </ng-container>
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="modifyUser(row)">
+    </tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</div>

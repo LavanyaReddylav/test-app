@@ -1,0 +1,15 @@
+<div>
+  <div class="modalbox failure center animate">
+    <div class="icon">
+      <span>
+        <mat-icon>clear</mat-icon>
+      </span>
+    </div>
+    <h1>{{data.title}}</h1>
+    <p>{{data.content}}</p>
+    <div fxLayout fxLayoutGap="20px">
+      <button mat-raised-button (click)="dialogRef.close(false)">cancel</button>
+      <button mat-raised-button color="warn" (click)="dialogRef.close(true)">Ok</button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,139 @@
+<div fxLayout fxLayoutAlign="space-between center">
+  <!-- Search Filter -->
+  <div>
+    <mat-form-field>
+      <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Search">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
+  <!-- Show Selected Attendance -->
+  <div *ngIf="selection.hasValue()" class="selected">
+    {{selection.selected.length}} {{selection.selected.length == 1 ? 'User' : 'Users'}} selected
+  </div>
+  <!-- Action menu list -->
+  <div *ngIf="selection.hasValue()">
+    <button mat-icon-button [matMenuTriggerFor]="menu" (click)="selectAttendance()">
+      <mat-icon>more_vert</mat-icon>
+    </button>
+    <mat-menu #menu="matMenu">
+      <button mat-menu-item class="mat-menu-item" (click)="openConfirmationModal()">
+        <mat-icon>delete_outline</mat-icon>
+        <span>Delete</span>
+      </button>
+    </mat-menu>
+  </div>
+</div>
+
+<div class="mat-elevation-z3">
+  <table mat-table [dataSource]="dataSource" multiTemplateDataRows matSort>
+
+    <!-- Checkbox Column -->
+    <ng-container matColumnDef="select">
+      <th mat-header-cell *matHeaderCellDef>
+        <mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()"
+          [indeterminate]="selection.hasValue() && !isAllSelected()">
+        </mat-checkbox>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+        </mat-checkbox>
+      </td>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="LASM Name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> LASM Name </th>
+      <td mat-cell *matCellDef="let row"> {{row['LASM Name'] | titlecase}} </td>
+    </ng-container>
+
+    <!-- loginid Column -->
+    <ng-container matColumnDef="Loginid">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Loginid </th>
+      <td mat-cell *matCellDef="let row"> {{row.Loginid}} </td>
+    </ng-container>
+
+    <!-- loginid Column -->
+    <ng-container matColumnDef="Employee Code">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Emp Code </th>
+      <td mat-cell *matCellDef="let row"> {{row['Employee Code']}} </td>
+    </ng-container>
+
+    <!-- Status  Column -->
+    <ng-container matColumnDef="Active">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Active </th>
+      <td mat-cell *matCellDef="let row"> {{row.Active }} </td>
+    </ng-container>
+
+
+    <!-- date  Column -->
+    <ng-container matColumnDef="Date">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Date </th>
+      <td mat-cell *matCellDef="let row"> {{row.Date | date}} </td>
+    </ng-container>
+
+
+    <!-- Status  Column -->
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+      <td mat-cell *matCellDef="let row"> {{row.status }} </td>
+    </ng-container>
+
+
+    <!-- Checkin  Column -->
+    <ng-container matColumnDef="checkintime">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Checkin Time </th>
+      <td mat-cell *matCellDef="let row"> {{row.checkin?.time}} </td>
+    </ng-container>
+
+    <!-- Checkout  Column -->
+    <ng-container matColumnDef="checkouttime">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Checkout Time </th>
+      <td mat-cell *matCellDef="let row"> {{row.checkout?.time}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="expandedDetail">
+      <td mat-cell *matCellDef="let row" [attr.colspan]="displayedColumns.length">
+        <div fxLayout fxLayoutAlign="center" class="example-element-detail" [@detailExpand]="row == expandedElement ? 'expanded' : 'collapsed'">
+          <div fxLayout>
+            <div class="attendance-details mat-elevation-z3">
+              <h3>Details</h3>
+              <div>
+                <mat-list>
+                  <mat-list-item>
+                    <mat-icon matListIcon>create</mat-icon>
+                    <h5> Reason : {{row.reason}} </h5>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <mat-icon matListIcon>how_to_reg</mat-icon>
+                    <h5> Remarks : &nbsp;{{row.checkin?.remarks}} &nbsp;& &nbsp;{{row.checkout?.remarks}} </h5>
+                  </mat-list-item>
+                  <mat-list-item>
+                    <mat-icon matListIcon>location_on</mat-icon>
+                    <h5> Location : {{row.checkin?.latitude}}&nbsp;&nbsp;-&nbsp;&nbsp;{{row.checkin?.longitude}}
+                      {{row.checkout?.latitude}}&nbsp;&nbsp;-&nbsp;&nbsp;{{row.checkout?.longitude}}</h5>
+
+                  </mat-list-item>
+                </mat-list>
+              </div>
+            </div>
+            <div class="check-image mat-elevation-z3">
+              <h3>Checkin Image</h3>
+              <img src="{{row.checkin?.image}}" alt="image">
+            </div>
+            <div class="check-image mat-elevation-z3">
+              <h3>Checkout Image</h3>
+              <img src="{{row.checkout?.image}}" alt="image">
+            </div>
+          </div>
+        </div>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="expandedElement = row" class="example-element-row">
+    </tr>
+    <tr mat-row *matRowDef="let element; columns: ['expandedDetail']" class="example-detail-row"></tr>
+  </table>
+
+  <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+</div>

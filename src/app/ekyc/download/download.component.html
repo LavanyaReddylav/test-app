@@ -1,0 +1,129 @@
+<br>
+<!-- Filters -->
+<mat-card>
+  <h4>Export Detailed Report As Of ( {{today}} )</h4>
+  <mat-card-header>
+    <mat-card-title>
+      <h2>Filters <mat-icon>layers</mat-icon>
+      </h2>
+    </mat-card-title>
+  </mat-card-header>
+  <form [formGroup]="filterForm">
+    <div fxLayout fxLayoutGap="1.2rem">
+      <!-- Division -->
+      <div>
+        <mat-form-field>
+          <mat-icon matSuffix class="mat-icons">toys</mat-icon>
+          <mat-select placeholder="Division" formControlName="division" multiple>
+            <mat-select-trigger>
+              {{filterForm.get('division').value ? filterForm.get('division').value[0] : ''}}
+              <span *ngIf="filterForm.get('division').value?.length > 1" class="others">
+                (+{{filterForm.get('division').value.length - 1}}
+                {{filterForm.get('division').value?.length === 2 ?
+                'other' :
+                'others'}})
+              </span>
+            </mat-select-trigger>
+            <mat-option #AllDivision (click)="toggleAllSelection('division','AllDivision')" value='all'>All
+            </mat-option>
+            <mat-option *ngFor="let division of division" [value]="division.dvcode">{{division.division
+              | titlecase}}
+              &nbsp; ({{division.code}}) &nbsp; <strong>{{division.dvcode}}</strong></mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!-- Sales Office -->
+      <div>
+        <mat-form-field>
+          <mat-icon matSuffix class="mat-icons">place</mat-icon>
+          <mat-select placeholder="Sales Office" formControlName="sales_office" [multiple]="multiple">
+            <mat-select-trigger *ngIf="multiple">
+              {{filterForm.get('sales_office').value ? filterForm.get('sales_office').value[0] : ''}}
+              <span *ngIf="filterForm.get('sales_office').value?.length > 1" class="others">
+                (+{{filterForm.get('sales_office').value.length - 1}}
+                {{filterForm.get('sales_office').value?.length === 2 ?
+                'other' :
+                'others'}})
+              </span>
+            </mat-select-trigger>
+            <mat-option *ngIf="multiple" #AllSalesOffice (click)="toggleAllSelection('sales_office','AllSalesOffice')"
+              value='all'>All
+            </mat-option>
+            <mat-option *ngFor="let salesOffice of sales_office" [value]="salesOffice">{{salesOffice}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!-- Distribution Channel -->
+      <div>
+        <mat-form-field>
+          <mat-icon matSuffix class="mat-icons">swap_calls</mat-icon>
+          <mat-select placeholder="Distribution Channel" formControlName="dc" multiple>
+            <mat-select-trigger>
+              {{filterForm.get('dc').value ? filterForm.get('dc').value[0] : ''}}
+              <span *ngIf="filterForm.get('division').value?.length > 1" class="others">
+                (+{{filterForm.get('dc').value.length - 1}} {{filterForm.get('dc').value?.length
+                === 2 ?
+                'other' :
+                'others'}})
+              </span>
+            </mat-select-trigger>
+            <mat-option *ngFor="let dc of dcList" [value]="dc.code">{{dc.name}} &nbsp; ({{dc.dc_code}})</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!-- Master/Ekyc -->
+      <div>
+        <mat-form-field>
+          <mat-icon matSuffix class="mat-icons">device_hub</mat-icon>
+          <mat-select placeholder="Master/eKYC" formControlName="only_ekyc">
+            <mat-option *ngFor="let status of ekycValues" [value]="status.value">
+              {{status.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!-- Forms Selection -->
+      <div>
+        <mat-form-field>
+          <mat-icon matSuffix class="mat-icons">device_hub</mat-icon>
+          <mat-select placeholder="Forms Selection" formControlName="form" multiple>
+            <mat-option #AllForms (click)="toggleAllSelection('form','AllForms')" value='all'>All
+            </mat-option>
+            <mat-option *ngFor="let f of form" [value]="f.value">
+              {{f.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <br>
+    <div fxLayout fxLayoutGap="4rem" fxLayoutAlign="start center">
+      <!--Export-->
+      <button *ngIf="!downloadReady" mat-raised-button color="accent" class="export" (click)="exportReport()"
+        [disabled]="!filterForm.valid">
+        <mat-icon>open_in_new</mat-icon>&nbsp;<span><strong>Export Detailed Report</strong></span>
+      </button>
+      <mat-progress-bar *ngIf="showLoader && !downloadReady" mode="indeterminate"
+        style="margin-top: -5rem; height:0.3rem; max-width: 50%;left:20%;">
+      </mat-progress-bar>
+      <button *ngIf="downloadReady" mat-raised-button color="primary" (click)="downloadReport()" class="export">
+        <mat-icon>arrow_downward</mat-icon>&nbsp;<span><strong>Report is Ready Click To Download</strong></span>
+      </button>
+    </div>
+  </form>
+  <br>
+</mat-card>
+<br>
+<mat-card>
+  <h4>Export Summary Report As Of ( {{today}} )</h4>
+  <div fxLayout fxLayoutGap="2rem">
+    <!--Export-->
+    <a [href]="baseUrl + '/counter/summary'" target="_blank">
+      <button mat-raised-button color="primary" class="export">
+        <mat-icon>open_in_new</mat-icon>&nbsp;<span><strong>Export Summary Report</strong></span>
+      </button></a>
+  </div>
+  <br>
+</mat-card>
+<!-- <br> -->
+<br><br>

@@ -1,0 +1,92 @@
+$text-color: rgb(148, 144, 144); //text color grey.
+$primary: #3F51B5;// primary color.
+$accent:  #E91E63;// accent color.
+$warn:    #f44336;//warn color.
+
+.mat-icons{
+    color: $text-color;
+}
+
+.primary{
+    color: $primary;
+}
+
+.accent{
+    color: $accent; 
+}
+
+mat-card{
+    max-width: 90%;
+    .card-title{
+        font-size: 1rem;
+        color: $text-color;
+    }
+}
+
+mat-select{
+    font-size: 0.8rem;
+}
+.others{ 
+    opacity: 0.75;
+    font-size: 0.75em;
+} 
+
+.selected-distributors-chip-list {
+    width: 100%;
+    mat-form-field{
+        width: 30rem;
+    }
+}
+
+.selected-counters-chip-list {
+    width: 100%;
+    mat-form-field{
+        width: 30rem;
+    }
+}
+
+mat-option{
+        font-size: 0.8rem;
+    }
+
+mat-form-field{
+    // max-width: 10rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+h5{
+    color: $warn;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.note{
+    color: $text-color;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+
+.apply-mapping{
+    button{
+        border-radius: 5rem;
+        font-size: 0.9rem;
+        font-weight: bold;
+    }
+}
+
+.date-selector{
+   cursor: pointer;
+   height: 3rem;
+   width: 3rem;  
+   border-radius: 50%;
+}
+
+.mapped{
+    color: white;
+    border: 2px solid white;
+    background-color: #8BC34A;
+    &:hover{
+        background-color: rgb(161, 230, 82);
+    }
+}

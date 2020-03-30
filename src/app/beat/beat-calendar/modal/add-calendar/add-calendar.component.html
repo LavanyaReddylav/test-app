@@ -1,0 +1,34 @@
+<div fxLayout fxLayoutAlign="space-between" class="title">
+  <span>Add New Schedule</span>
+</div>
+<br> <br>
+<form [formGroup]="addScheduleForm">
+  <div fxLayout fxLayoutAlign="space-between">
+    <!-- Date Picker -->
+    <mat-form-field>
+      <input matInput [matDatepicker]="picker" placeholder="Select Beat Date" formControlName="date">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker touchUi #picker></mat-datepicker>
+    </mat-form-field>
+    <!-- Beat Select -->
+    <div>
+      <mat-form-field>
+        <mat-icon matSuffix class="mat-icons">device_hub</mat-icon>
+        <mat-select placeholder="Select Beat" formControlName="beat">
+          <mat-option *ngFor="let beat of data.beats" value="{{beat.name}}">
+            {{beat.name | titlecase}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+</form>
+<br>
+<div fxLayout fxLayoutAlign="space-between">
+  <div fxLayout fxLayoutAlign="space-between">
+    <button mat-button color="accent" (click)="cancel(false)"> <strong>Cancel</strong> </button>
+  </div>
+  <div>
+    <button mat-button color="primary" (click)="addSchedule()"> <strong>Add</strong> </button>
+  </div>
+</div>

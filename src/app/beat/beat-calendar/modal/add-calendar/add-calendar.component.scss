@@ -1,0 +1,26 @@
+$text-color: rgb(148, 144, 144); //text color grey.
+$primary: #3F51B5;// primary color.
+$accent:  #E91E63;// accent color.
+$warn:    #f44336;//warn color.
+
+.title{
+    & span{
+    color: $primary;
+    font-size: 1rem;
+    font-weight: bold;
+    }
+}
+
+mat-form-field{
+    max-width: 10rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+
+.mat-icons{
+    color: $text-color;
+}
+
+mat-select{
+    font-size: 0.8rem;
+}

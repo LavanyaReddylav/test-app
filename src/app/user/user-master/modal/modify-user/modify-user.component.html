@@ -1,0 +1,255 @@
+<div *ngIf="!showSpinner">
+  <h2 mat-dialog-title>Modify User
+  </h2>
+  <mat-dialog-content>
+    <form [formGroup]="modifyUserForm">
+      <div class="form-group" fxLayout fxLayoutGap="2rem">
+        <!-- username -->
+        <div>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Name" formControlName="name">
+            <mat-icon matSuffix>account_circle</mat-icon>
+            <button mat-button *ngIf="modifyUserForm.get('name').value" matSuffix mat-icon-button
+              (click)="modifyUserForm.get('name').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-error *ngIf="modifyUserForm.get('name').hasError('required')">
+              Name is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- mobile number -->
+        <div>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Mobile" formControlName="mobile" [errorStateMatcher]="matcher">
+            <mat-icon matSuffix>phone_iphone</mat-icon>
+            <button mat-button *ngIf="modifyUserForm.get('mobile').value" matSuffix mat-icon-button
+              (click)="modifyUserForm.get('mobile').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-error *ngIf="modifyUserForm.get('mobile').hasError('required')">
+              Mobile is <strong>required</strong>
+            </mat-error>
+            <mat-error
+              *ngIf="modifyUserForm.get('mobile').hasError('minlength') || modifyUserForm.get('mobile').hasError('maxlength')">
+              Mobile is not <strong>valid</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- email -->
+        <div>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Email" formControlName="email" [errorStateMatcher]="matcher">
+            <mat-icon matSuffix>email</mat-icon>
+            <button mat-button *ngIf="modifyUserForm.get('email').value" matSuffix mat-icon-button
+              (click)="modifyUserForm.get('email').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-error *ngIf="modifyUserForm.get('email').hasError('required')">
+              Email is <strong>required</strong>
+            </mat-error>
+            <mat-error
+              *ngIf="modifyUserForm.get('email').hasError('email') && !modifyUserForm.get('email').hasError('required')">
+              Email is not <strong>valid</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="form-group" fxLayout fxLayoutGap="2rem">
+        <!-- loginid -->
+        <div>
+          <mat-form-field>
+            <input matInput type="loginid" placeholder="LoginId" formControlName="loginid">
+            <mat-icon matSuffix>fingerprint</mat-icon>
+            <button mat-button *ngIf="modifyUserForm.get('loginid').value" matSuffix mat-icon-button
+              (click)="modifyUserForm.get('loginid').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-error *ngIf="modifyUserForm.get('loginid').hasError('required')">
+              LoginId is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- user role -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix>account_box</mat-icon>
+            <mat-select placeholder="User role" class="others" formControlName="role">
+              <mat-option *ngFor="let role of userRole" [value]="role.value">
+                {{role.viewValue}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="modifyUserForm.get('role').hasError('required')">
+              Role is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- sales-office -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix>place</mat-icon>
+            <mat-select placeholder="Sales Office" formControlName="sales_office" multiple>
+              <mat-select-trigger>
+                {{modifyUserForm.get('sales_office').value ? modifyUserForm.get('sales_office').value[0] : ''}}
+                <span *ngIf="modifyUserForm.get('sales_office').value?.length > 1" class="others">
+                  (+{{modifyUserForm.get('sales_office').value.length - 1}}
+                  {{modifyUserForm.get('sales_office').value?.length ===
+                  2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let salesOffice of salesOfficeList" [value]="salesOffice">{{salesOffice}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="modifyUserForm.get('sales_office').hasError('required')">
+              Sales Office is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="form-group" fxLayout fxLayoutGap="2rem">
+        <!-- gtm cities -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix>location_city</mat-icon>
+            <mat-select placeholder="Gtm City" formControlName="gtm_city" multiple>
+              <mat-select-trigger>
+                {{modifyUserForm.get('gtm_city').value ? modifyUserForm.get('gtm_city').value[0] : ''}}
+                <span *ngIf="modifyUserForm.get('gtm_city').value?.length > 1" class="others">
+                  (+{{modifyUserForm.get('gtm_city').value.length - 1}} {{modifyUserForm.get('gtm_city').value?.length
+                  === 2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let gtmCity of gtmCityList | filter : modifyUserForm.get('sales_office').value"
+                [value]="gtmCity.name">{{gtmCity.name
+                | titlecase}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="modifyUserForm.get('gtm_city').hasError('required')">
+              Gtm City is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- divisions -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix>toys</mat-icon>
+            <mat-select placeholder="Division" formControlName="division" multiple>
+              <mat-select-trigger>
+                {{modifyUserForm.get('division').value ? modifyUserForm.get('division').value[0] : ''}}
+                <span *ngIf="modifyUserForm.get('division').value?.length > 1" class="others">
+                  (+{{modifyUserForm.get('division').value.length - 1}} {{modifyUserForm.get('division').value?.length
+                  === 2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let division of divisionList" [value]="division.dvcode">{{division.division |
+                titlecase}}
+                &nbsp; ({{division.code}}) &nbsp; <strong>{{division.dvcode}}</strong></mat-option>
+            </mat-select>
+            <mat-error *ngIf="modifyUserForm.get('division').hasError('required')">
+              Division is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- distribution channel -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix>swap_calls</mat-icon>
+            <mat-select placeholder="DC" formControlName="dc" multiple>
+              <mat-select-trigger>
+                {{modifyUserForm.get('dc').value ? modifyUserForm.get('dc').value[0] : ''}}
+                <span *ngIf="modifyUserForm.get('division').value?.length > 1" class="others">
+                  (+{{modifyUserForm.get('dc').value.length - 1}} {{modifyUserForm.get('dc').value?.length === 2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let dc of dcList" [value]="dc.code">{{dc.name}} &nbsp; ({{dc.dc_code}})</mat-option>
+            </mat-select>
+            <mat-error *ngIf="modifyUserForm.get('dc').hasError('required')">
+              DC is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="form-group" fxLayout fxLayoutGap="2rem">
+        <!-- weekly off-->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix>weekend</mat-icon>
+            <mat-select placeholder="Weekly off" formControlName="weekly_off" multiple>
+              <mat-select-trigger>
+                {{modifyUserForm.get('weekly_off').value ? modifyUserForm.get('weekly_off').value[0] : ''}}
+                <span *ngIf="modifyUserForm.get('weekly_off').value?.length > 1" class="others">
+                  (+{{modifyUserForm.get('weekly_off').value.length - 1}}
+                  {{modifyUserForm.get('weekly_off').value?.length === 2
+                  ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let weeklyoffs of weeklyoffList" [value]="weeklyoffs">{{weeklyoffs | titlecase}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!--user status-->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix class="mat-icons">device_hub</mat-icon>
+            <mat-select placeholder="User Status" formControlName="active">
+              <mat-option *ngFor="let user of userStatus" [value]="user.value">
+                {{user.viewValue}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!-- leaving date -->
+        <div *ngIf="modifyUserForm.get('active').value == false">
+          <mat-form-field>
+            <input matInput [matDatepicker]="datePicker" placeholder="Leaving Date" formControlName="leaving_date">
+            <mat-datepicker-toggle matSuffix [for]="datePicker" disabled="false">
+            </mat-datepicker-toggle>
+            <mat-datepicker touchUi #datePicker></mat-datepicker>
+            <!-- <mat-error *ngIf="modifyUserForm.get('leaving_date').hasError('required')">
+              Leaving Date is <strong>required</strong>
+            </mat-error> -->
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="form-group" fxLayout fxLayoutGap="2rem">
+        <!-- emp_code -->
+        <div>
+          <mat-form-field>
+            <input matInput type="emp_code" placeholder="Emp Code" formControlName="emp_code">
+            <mat-icon matSuffix>perm_identity</mat-icon>
+            <button mat-button *ngIf="modifyUserForm.get('emp_code').value" matSuffix mat-icon-button
+              (click)="modifyUserForm.get('emp_code').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-error *ngIf="modifyUserForm.get('emp_code').hasError('required')">
+              Emp Code is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <div fxLayout>
+      <button mat-button color="accent" [mat-dialog-close]>
+        <span><strong>Cancel</strong></span>
+      </button>
+      <button mat-button color="primary" (click)="onSubmit()" [mat-dialog-close]="modifyUserForm.value"
+        [disabled]="!modifyUserForm.valid">
+        <span><strong>Modify User</strong></span>
+      </button>
+    </div>
+  </mat-dialog-actions>
+</div>
+<div fxLayout fxLayoutAlign="center center">
+  <mat-spinner *ngIf="showSpinner" [diameter]="100"></mat-spinner>
+</div>

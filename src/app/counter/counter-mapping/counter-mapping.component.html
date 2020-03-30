@@ -1,0 +1,105 @@
+<br>
+<div class="counter-mapping">
+  <div fxLayout fxLayoutAlign="space-between">
+    <div>
+      <h4>Beat Counter Mapping</h4>
+    </div>
+    <div fxLayout fxLayoutGap="1rem">
+      <a mat-raised-button color="primary" [href]="baseUrl + '/downloadFormat/counterBeatMapping'"
+        (click)="beatDownloadFormat()">
+        <mat-icon>assignment_returned</mat-icon>&nbsp;<span><strong>Download Format</strong></span>
+      </a>
+    </div>
+  </div>
+  <br>
+  <!-- Upload beat counter mapping section -->
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <h3>Upload Beat CounterMapping</h3>
+      </mat-card-title>
+    </mat-card-header>
+    <br>
+    <div fxLayout fxLayoutGap="3rem" fxLayoutAlign="start center">
+      <!-- File Upload for bulk upload beat countermapping. -->
+      <td-file-upload #singleFileUpload [disabled]="!beatMappingDownloadFormat" [(ngModel)]="beatMappingFile"
+        (select)="selectBeatMappingEvent($event)" (upload)="beatCounterMapping($event)"
+        (cancel)="cancelBeatMappingEvent()" accept=".xlsx" defaultColor="accent" activeColor="primary"
+        cancelColor="warn" required>
+        <mat-icon>file_upload</mat-icon><span>{{ beatMappingFile?.name }}</span>
+        <ng-template td-file-input-label>
+          <mat-icon>attach_file</mat-icon>
+          <span>
+            Choose an excel file...
+            <span [hidden]="!singleFileUpload?.required">*</span>
+          </span>
+        </ng-template>
+      </td-file-upload>
+      <mat-progress-bar mode="determinate" [value]="progressValue1" style="max-width:50%;height: 1rem;">
+      </mat-progress-bar>
+    </div>
+    <br><br><br>
+    <div fxLayout fxLayoutAlign="start">
+      <h5>{{error1?.status}} &nbsp; {{error1?.statusText}} &nbsp; &nbsp; {{error1?.error.message}} &nbsp;
+        &nbsp;{{error1?.error.error}}
+        &nbsp;&nbsp;{{error1?.error.beats}} &nbsp;&nbsp;{{error1?.error.counters}}</h5>
+      <h5 class="note" *ngIf="!beatMappingDownloadFormat">Note : First please download the format and upload strictliy
+        according to it.</h5>
+    </div>
+  </mat-card>
+</div>
+<br>
+<br>
+<!-- distributor counter mapping-->
+<br>
+<div class="counter-mapping">
+  <div fxLayout fxLayoutAlign="space-between">
+    <div>
+      <h4>Distributor Counter Mapping</h4>
+    </div>
+    <div fxLayout fxLayoutGap="1rem">
+      <a mat-raised-button color="primary" [href]="baseUrl + '/downloadFormat/counterDistributorMapping'"
+        (click)="distributorDownloadFormat()">
+        <mat-icon>assignment_returned</mat-icon>&nbsp;<span><strong>Download Format</strong></span>
+      </a>
+    </div>
+  </div>
+  <br>
+  <!-- Upload distributor counter mapping section -->
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <h3>Upload Distributor CounterMapping</h3>
+      </mat-card-title>
+    </mat-card-header>
+    <br>
+    <div fxLayout fxLayoutGap="3rem" fxLayoutAlign="start center">
+      <!-- File Upload for bulk upload distributor countermapping. -->
+      <td-file-upload #singleFileUpload [disabled]="!distributorMappingDownloadFormat"
+        [(ngModel)]="distributorMappingFile" (select)="selectDistributorMappingEvent($event)"
+        (upload)="distributorCounterMapping($event)" (cancel)="cancelDistributorMappingEvent()" accept=".xlsx"
+        defaultColor="accent" activeColor="primary" cancelColor="warn" required>
+        <mat-icon>file_upload</mat-icon><span>{{ singleFileUpload.value?.name }}</span>
+        <ng-template td-file-input-label>
+          <mat-icon>attach_file</mat-icon>
+          <span>
+            Choose an excel file...
+            <span [hidden]="!singleFileUpload?.required">*</span>
+          </span>
+        </ng-template>
+      </td-file-upload>
+      <mat-progress-bar mode="determinate" [value]="progressValue2" style="max-width:50%;height: 1rem;">
+      </mat-progress-bar>
+    </div>
+    <br><br><br>
+    <div fxLayout fxLayoutAlign="start">
+      <h5>{{error2?.status}} &nbsp; {{error2?.statusText}} &nbsp; &nbsp; {{error2?.error.message}} &nbsp;
+        &nbsp;{{error2?.error.error}}
+        &nbsp;&nbsp;{{error2?.error._distributors}} &nbsp;&nbsp;{{error2?.error._counters}}</h5>
+      <h5 class="note" *ngIf="!distributorMappingDownloadFormat">Note : First please download the format and upload
+        strictliy according to it.</h5>
+    </div>
+  </mat-card>
+</div>
+<br>
+<br>

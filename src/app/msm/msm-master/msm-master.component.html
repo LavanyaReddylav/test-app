@@ -1,0 +1,429 @@
+<br>
+<div class="msm-master">
+  <div fxLayout fxLayoutAlign="end" fxLayoutGap="1rem">
+    <button mat-raised-button color="primary" (click)="downloadFormat()" [disabled]="!uploadFilterForm.valid">
+      <mat-icon>assignment_returned</mat-icon>&nbsp;<span><strong>Download Format</strong></span>
+    </button>
+    <button mat-raised-button color="primary" (click)="showUpload=!showUpload">
+      <mat-icon>unarchive</mat-icon>&nbsp;<span><strong>Upload MSM</strong></span>
+    </button>
+  </div>
+  <br>
+  <!-- Upload MSM section -->
+  <mat-card *ngIf="showUpload">
+    <mat-card-header>
+      <mat-card-title>
+        <h3>Upload MSM</h3>
+      </mat-card-title>
+    </mat-card-header>
+    <br>
+    <!-- Selection Filters -->
+    <div>
+      <form [formGroup]="uploadFilterForm">
+        <div fxLayout fxLayoutGap="1.4rem">
+          <!-- Division -->
+          <div>
+            <mat-form-field>
+              <mat-icon matSuffix class="mat-icons">toys</mat-icon>
+              <mat-select placeholder="Division" formControlName="division" multiple>
+                <mat-select-trigger>
+                  {{uploadFilterForm.get('division').value ? uploadFilterForm.get('division').value[0] : ''}}
+                  <span *ngIf="uploadFilterForm.get('division').value?.length > 1" class="others">
+                    (+{{uploadFilterForm.get('division').value.length - 1}}
+                    {{uploadFilterForm.get('division').value?.length === 2 ?
+                    'other' :
+                    'others'}})
+                  </span>
+                </mat-select-trigger>
+                <mat-option (onSelectionChange)="toggleAllSelectionForm($event.source._selected,'division')"
+                  value='all'>All
+                </mat-option>
+                <mat-option *ngFor="let division of division" [value]="division.dvcode">
+                  {{division.division | titlecase}}
+                  &nbsp; ({{division.code}}) &nbsp; <strong>{{division.dvcode }}</strong></mat-option>
+              </mat-select>
+              <mat-error *ngIf="uploadFilterForm.get('division').hasError('required')">
+                Division is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <!-- Sales Office -->
+          <div>
+            <mat-form-field>
+              <mat-icon matSuffix class="mat-icons">place</mat-icon>
+              <mat-select placeholder="Sales Office" formControlName="sales_office" multiple>
+                <mat-select-trigger>
+                  {{uploadFilterForm.get('sales_office').value ? uploadFilterForm.get('sales_office').value[0] : ''}}
+                  <span *ngIf="uploadFilterForm.get('sales_office').value?.length > 1" class="others">
+                    (+{{uploadFilterForm.get('sales_office').value.length - 1}}
+                    {{uploadFilterForm.get('sales_office').value?.length === 2 ?
+                    'other' :
+                    'others'}})
+                  </span>
+                </mat-select-trigger>
+                <mat-option (onSelectionChange)="toggleAllSelectionForm($event.source._selected,'sales_office')"
+                  value='all'>All
+                </mat-option>
+                <mat-option *ngFor="let salesOffice of sales_office" [value]="salesOffice">{{salesOffice}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="uploadFilterForm.get('sales_office').hasError('required')">
+                Sales Office is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <!-- Gtm Cities -->
+          <!-- <div>
+            <mat-form-field>
+              <mat-icon matSuffix class="mat-icons">location_city</mat-icon>
+              <mat-select placeholder="Gtm City" formControlName="gtm_city" multiple>
+                <mat-select-trigger>
+                  {{filterForm.get('gtm_city').value ? filterForm.get('gtm_city').value[0] : ''}}
+                  <span *ngIf="filterForm.get('gtm_city').value?.length > 1" class="others">
+                    (+{{filterForm.get('gtm_city').value.length - 1}}
+                    {{filterForm.get('gtm_city').value?.length === 2 ?
+                    'other' :
+                    'others'}})
+                  </span>
+                </mat-select-trigger>
+                <mat-option *ngFor="let gtmCity of gtmCityList | filter : filterForm.get('sales_office').value" [value]="gtmCity.name">{{gtmCity.name
+                  |
+                  titlecase}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div> -->
+          <!-- Distribution Channel -->
+          <div>
+            <mat-form-field>
+              <mat-icon matSuffix class="mat-icons">swap_calls</mat-icon>
+              <mat-select placeholder="Distribution Channel" formControlName="dc">
+                <mat-select-trigger>
+                  {{uploadFilterForm.get('dc').value}}
+                  <span *ngIf="uploadFilterForm.get('dc').value" class="others">
+                  </span>
+                </mat-select-trigger>
+                <mat-option *ngFor="let dc of dcList" [value]="dc.code">{{dc.name}} &nbsp; ({{dc.dc_code}})</mat-option>
+              </mat-select>
+              <mat-error *ngIf="uploadFilterForm.get('dc').hasError('required')">
+                Distribution Channel is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <!--  Start Month  -->
+          <div>
+            <mat-form-field>
+              <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker1" placeholder="From Month"
+                formControlName="start_date">
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1 (monthSelected)="month_1_Selected($event)" startView="multi-year"
+                [disabled]="false"></mat-datepicker>
+              <mat-error *ngIf="uploadFilterForm.get('start_date').hasError('required')">
+                From Month is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <!--  End Month  -->
+          <div>
+            <mat-form-field>
+              <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker2" placeholder="To Month"
+                formControlName="end_date">
+              <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+              <mat-datepicker #picker2 (monthSelected)="month_2_Selected($event)" startView="multi-year"
+                disabled="false"></mat-datepicker>
+              <mat-error *ngIf="uploadFilterForm.get('end_date').hasError('required')">
+                To Month is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <br><br>
+        <!-- Categories -->
+        <div fxLayout fxLayoutGap="2rem">
+          <!--category -->
+          <div>
+            <mat-form-field>
+              <mat-icon matSuffix class="mat-icons">opacity</mat-icon>
+              <mat-select placeholder="Category" formControlName="category" multiple>
+                <mat-select-trigger>
+                  {{uploadFilterForm.get('category').value ? uploadFilterForm.get('category').value[0] : ''}}
+                  <span *ngIf="uploadFilterForm.get('category').value?.length > 1" class="others">
+                    (+{{uploadFilterForm.get('category').value.length - 1}}
+                    {{uploadFilterForm.get('category').value?.length === 2 ?
+                    'other' :
+                    'others'}})
+                  </span>
+                </mat-select-trigger>
+                <mat-option (onSelectionChange)="toggleAllSelectionForm($event.source._selected,'category')"
+                  value='all'>All
+                </mat-option>
+                <mat-option *ngFor="let c of category | category :  uploadFilterForm.get('division').value"
+                  [value]="c.category">{{c?.category
+                  | titlecase}}
+                  &nbsp; ({{c?.code}})</mat-option>
+              </mat-select>
+              <mat-error *ngIf="uploadFilterForm.get('category').hasError('required')">
+                Category is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <!-- Subcategory1 -->
+
+          <div>
+            <mat-form-field>
+              <mat-icon matSuffix class="mat-icons">whatshot</mat-icon>
+              <mat-select placeholder="Category 2" formControlName="subcategory1" multiple>
+                <mat-select-trigger>
+                  {{uploadFilterForm.get('subcategory1').value ? uploadFilterForm.get('subcategory1').value[0] : ''}}
+                  <span *ngIf="uploadFilterForm.get('subcategory1').value?.length > 1" class="others">
+                    (+{{uploadFilterForm.get('subcategory1').value.length - 1}}
+                    {{uploadFilterForm.get('subcategory1').value?.length === 2 ?
+                    'other' :
+                    'others'}})
+                  </span>
+                </mat-select-trigger>
+                <mat-option (onSelectionChange)="toggleAllSelectionForm($event.source._selected,'subcategory1')"
+                  value='all'>All
+                </mat-option>
+                <mat-option *ngFor="let s1 of subcategory1 | subcategory1 : uploadFilterForm.get('category').value"
+                  [value]="s1.subcategory1">{{s1?.subcategory1
+                  | titlecase}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="uploadFilterForm.get('subcategory1').hasError('required')">
+                Sub Category-1 is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <!-- Subcategory 2 -->
+          <div>
+            <mat-form-field>
+              <mat-icon matSuffix class="mat-icons">ac_unit</mat-icon>
+              <mat-select placeholder="category 3" formControlName="subcategory2" multiple>
+                <mat-select-trigger>
+                  {{uploadFilterForm.get('subcategory2').value ? uploadFilterForm.get('subcategory2').value[0] : ''}}
+                  <span *ngIf="uploadFilterForm.get('subcategory2').value?.length > 1" class="others">
+                    (+{{uploadFilterForm.get('subcategory2').value.length - 1}}
+                    {{uploadFilterForm.get('subcategory2').value?.length === 2 ?
+                    'other' :
+                    'others'}})
+                  </span>
+                </mat-select-trigger>
+                <mat-option (onSelectionChange)="toggleAllSelectionForm($event.source._selected,'subcategory2')"
+                  value='all'>All
+                </mat-option>
+                <mat-option *ngFor="let s2 of subcategory2 | subcategory2 : uploadFilterForm.get('subcategory1').value"
+                  [value]="s2.subcategory2">{{s2?.subcategory2
+                  | titlecase}}
+                </mat-option>
+              </mat-select>
+              <mat-error *ngIf="uploadFilterForm.get('subcategory2').hasError('required')">
+                Sub Category-2 is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <!-- MSM category -->
+          <!-- <div>
+            <mat-form-field>
+              <mat-icon matSuffix class="mat-icons">star_half</mat-icon>
+              <input matInput placeholder="MSM Category" formControlName="msm_category">
+              <button mat-button *ngIf="uploadFilterForm.get('msm_category').value" matSuffix mat-icon-button (click)="uploadFilterForm.get('msm_category').setValue('')">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-error *ngIf="uploadFilterForm.get('msm_category').hasError('required')">
+                MSM Category is <strong>required</strong>
+              </mat-error>
+            </mat-form-field>
+          </div> -->
+          <mat-progress-bar mode="indeterminate" *ngIf="showProgresss" style="height:0.3rem; max-width: 40%;">
+          </mat-progress-bar>
+
+        </div>
+      </form>
+    </div>
+    <br><br>
+    <div fxLayout fxLayoutGap="3rem" fxLayoutAlign="start center">
+      <!-- File Upload for bulk upload msms. -->
+      <td-file-upload [disabled]="!DownloadFormat" #singleFileUpload [(ngModel)]="file" (select)="selectEvent($event)"
+        (upload)="uploadEvent($event)" (cancel)="cancelEvent()" accept=".xlsx" defaultColor="accent"
+        activeColor="primary" cancelColor="warn" required>
+        <mat-icon>file_upload</mat-icon><span>{{ singleFileUpload.value?.name }}</span>
+        <ng-template td-file-input-label>
+          <mat-icon>attach_file</mat-icon>
+          <span>
+            Choose an excel file...
+            <span [hidden]="!singleFileUpload?.required">*</span>
+          </span>
+        </ng-template>
+      </td-file-upload>
+      <mat-progress-bar mode="determinate" [value]="progressValue" style="max-width:50%;height: 1rem;">
+      </mat-progress-bar>
+      <mat-spinner *ngIf="showLoader" [diameter]="40"></mat-spinner>
+    </div>
+    <br><br><br>
+    <div fxLayout fxLayoutGap="3rem" fxLayoutAlign="start center">
+      <button mat-fab (click)="showUpload=!showUpload" class="upload-back mat-elevation-z3">
+        <mat-icon aria-label="Example icon-button with a heart icon">navigate_before
+        </mat-icon>
+      </button>
+      <h5 *ngIf="error" class="error">{{error?.status}} &nbsp; {{error?.statusText}} &nbsp; &nbsp;
+        {{error?.error.message}}
+        &nbsp; &nbsp;
+        {{error?.error.data}}</h5>
+      <h5 class="note" *ngIf="!DownloadFormat">Note : First please download the format and upload strictliy
+        according to it.</h5>
+    </div>
+  </mat-card>
+  <br>
+  <!-- Filters -->
+  <mat-card *ngIf="!showUpload">
+    <mat-card-header>
+      <mat-card-title>
+        <h2>Filters <mat-icon>layers</mat-icon>
+        </h2>
+      </mat-card-title>
+    </mat-card-header>
+    <form [formGroup]="filterForm">
+      <div fxLayout fxLayoutGap="1.4rem">
+        <!-- Division -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix class="mat-icons">toys</mat-icon>
+            <mat-select placeholder="Division" formControlName="division" multiple>
+              <mat-select-trigger>
+                {{filterForm.get('division').value ? filterForm.get('division').value[0] : ''}}
+                <span *ngIf="filterForm.get('division').value?.length > 1" class="others">
+                  (+{{filterForm.get('division').value.length - 1}}
+                  {{filterForm.get('division').value?.length === 2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option (onSelectionChange)="toggleAllSelection($event.source._selected,'division')" value='all'>All
+              </mat-option>
+              <mat-option *ngFor="let division of division" [value]="division.dvcode">{{division.division
+                | titlecase}}
+                &nbsp; ({{division.code}}) &nbsp; <strong>{{division.dvcode }}</strong></mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!-- Sales Office -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix class="mat-icons">place</mat-icon>
+            <mat-select placeholder="Sales Office" formControlName="sales_office" multiple>
+              <mat-select-trigger>
+                {{filterForm.get('sales_office').value ? filterForm.get('sales_office').value[0] : ''}}
+                <span *ngIf="filterForm.get('sales_office').value?.length > 1" class="others">
+                  (+{{filterForm.get('sales_office').value.length - 1}}
+                  {{filterForm.get('sales_office').value?.length === 2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option (onSelectionChange)="toggleAllSelection($event.source._selected,'sales_office')" value='all'>
+                All
+              </mat-option>
+              <mat-option *ngFor="let salesOffice of sales_office" [value]="salesOffice">{{salesOffice}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!-- Gtm Cities -->
+        <!-- <div>
+          <mat-form-field>
+            <mat-icon matSuffix class="mat-icons">location_city</mat-icon>
+            <mat-select placeholder="Gtm City" formControlName="gtm_city" multiple>
+              <mat-select-trigger>
+                {{filterForm.get('gtm_city').value ? filterForm.get('gtm_city').value[0] : ''}}
+                <span *ngIf="filterForm.get('gtm_city').value?.length > 1" class="others">
+                  (+{{filterForm.get('gtm_city').value.length - 1}}
+                  {{filterForm.get('gtm_city').value?.length === 2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let gtmCity of gtmCityList | filter : filterForm.get('sales_office').value"
+                [value]="gtmCity.name">{{gtmCity.name
+                |
+                titlecase}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div> -->
+        <!-- Distribution Channel -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix class="mat-icons">swap_calls</mat-icon>
+            <mat-select placeholder="Distribution Channel" formControlName="dc" multiple>
+              <mat-select-trigger>
+                {{filterForm.get('dc').value ? filterForm.get('dc').value[0] : ''}}
+                <span *ngIf="filterForm.get('division').value?.length > 1" class="others">
+                  (+{{filterForm.get('dc').value.length - 1}} {{filterForm.get('dc').value?.length
+                  === 2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let dc of dcList" [value]="dc.code">{{dc.name}} &nbsp; ({{dc.dc_code}})</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <br><br>
+        <!--MSM status-->
+        <!-- <div>
+          <mat-form-field>
+            <mat-icon matSuffix class="mat-icons">device_hub</mat-icon>
+            <mat-select placeholder="MSM Status" formControlName="active">
+              <mat-option *ngFor="let msm of msmStatus" [value]="msm.value">
+                {{msm.viewValue}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div> -->
+        <!--  Start Month  -->
+        <div>
+          <mat-form-field>
+            <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker1" placeholder="From Month"
+              formControlName="start_date">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1 (monthSelected)="month_1_Selected($event)" startView="multi-year"
+              [disabled]="false"></mat-datepicker>
+            <mat-error *ngIf="filterForm.get('start_date').hasError('required')">
+              From Month is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!--  End Month  -->
+        <div>
+          <mat-form-field>
+            <input matInput [min]="minDate" [max]="maxDate" [matDatepicker]="picker2" placeholder="To Month"
+              formControlName="end_date">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2 (monthSelected)="month_2_Selected($event)" startView="multi-year" disabled="false">
+            </mat-datepicker>
+            <mat-error *ngIf="filterForm.get('end_date').hasError('required')">
+              To Month is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+    <br><br>
+    <!--Load And Export-->
+    <div fxLayout fxLayoutGap="1rem">
+      <button mat-raised-button color="accent" (click)="loadMsm()">
+        <mat-icon>autorenew</mat-icon>&nbsp;<span><strong>Load</strong></span>
+      </button>
+      <button mat-raised-button color="accent" (click)="exportMsm()" class="export" [disabled]="!msms">
+        <mat-icon>open_in_new</mat-icon>&nbsp;<span><strong>Export</strong></span>
+      </button>
+    </div>
+  </mat-card>
+  <br>
+  <!-- MSM-Panel -->
+  <mat-card *ngIf="showPanel">
+    <div fxLayout fxLayoutAlign="center center">
+      <mat-spinner *ngIf="!msms" [diameter]="70"></mat-spinner>
+    </div>
+    <msm-panel [msms]="msms" *ngIf="msms" (successEvent)="loadMsm()"></msm-panel>
+  </mat-card>
+</div>
+<br>

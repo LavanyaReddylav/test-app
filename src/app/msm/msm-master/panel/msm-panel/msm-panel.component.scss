@@ -1,0 +1,43 @@
+
+$text-color: rgb(148, 144, 144); //text color grey.
+$primary: #3F51B5;// primary color.
+$accent:  #E91E63;// accent color.
+$warn:    #f44336;//warn color.
+
+mat-panel-title{
+    font-weight:bold;
+    color:gray;
+    font-size: 0.8rem;
+}
+
+//MSMS Squares.
+.squares{
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    &::-webkit-scrollbar {
+      display: none;
+    }
+    & div {
+      padding: 1rem;
+      width: 10rem;
+      height: 4rem;
+      border-radius: 0.3rem;
+      margin-left: 0.3rem;
+      margin-top: 0.3rem; 
+      background-color: white;
+      cursor: pointer;
+  
+      & span{
+        font-size: 0.8rem;
+        color: $primary;
+      }
+  
+      & p {
+        font-size: 0.8rem;
+        color: $accent;
+        font-weight: 600;
+        word-break: keep-all;
+      }
+  
+    }}

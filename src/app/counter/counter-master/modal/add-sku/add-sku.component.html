@@ -1,0 +1,29 @@
+<div>
+  <h1 mat-dialog-title class="title">Add Skus</h1>
+  <mat-dialog-content>
+    <!-- Search SKUS-->
+    <!-- Search Filter -->
+    <div fxLayout fxLayoutAlign="space-between">
+      <mat-form-field>
+        <input matInput [(ngModel)]="searchText" placeholder="Search Skus">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+    </div>
+    <br>
+    <!-- Show SKUS LIST -->
+    <div class="sku-list">
+      <mat-progress-bar *ngIf="!products" mode="indeterminate" style="margin-top: 2rem; height:0.3rem; max-width: 80%;"></mat-progress-bar>
+      <div class="mat-elevation-z1" *ngFor="let product of products | sku : searchText">
+        <span>{{product.sku_code}}</span>&nbsp; <span>{{product.material_group}}</span> &nbsp; <span>{{product.client_dv_code}}</span><br>
+        <b>{{product.sku}}</b><br>
+        <b>{{product.category | titlecase}}</b><br>
+        <!-- &nbsp;<b>{{product.subcategory1 | truncate:[10]}}</b> -->
+        <i>{{product.division}}</i> &nbsp; <i>{{product.dvcode}}</i><br>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayout fxLayoutAlign="space-between">
+    <button mat-button color="accent" (click)="cancel(false)">Cancel</button>
+    <button mat-button color="primary" (click)="addSkus(searchText)">Add Skus</button>
+  </mat-dialog-actions>
+</div>

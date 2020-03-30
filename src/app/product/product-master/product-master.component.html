@@ -1,0 +1,147 @@
+<br>
+<div class="product-master">
+  <!--Download Format And Upload Products-->
+  <div fxLayout fxLayoutGap="1rem" fxLayoutAlign="end">
+    <a mat-raised-button color="primary" [href]="baseUrl + '/downloadFormat/uploadProduct'" (click)="downloadFormat()">
+      <mat-icon>assignment_returned</mat-icon>&nbsp;<span><strong>Download Format</strong></span>
+    </a>
+    <button mat-raised-button color="primary" (click)="showUpload=!showUpload" class="button">
+      <mat-icon>unarchive</mat-icon>&nbsp;<span><strong>Upload Products</strong></span>
+    </button>
+  </div>
+  <br>
+  <mat-card *ngIf="!showUpload">
+    <!-- Division -->
+    <form [formGroup]="filterForm">
+      <div fxLayout fxLayoutGap="2rem">
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix class="mat-icons">toys</mat-icon>
+            <mat-select placeholder="Division" formControlName="division" multiple>
+              <mat-select-trigger>
+                {{filterForm.get('division').value ? filterForm.get('division').value[0] : ''}}
+                <span *ngIf="filterForm.get('division').value?.length > 1" class="others">
+                  (+{{filterForm.get('division').value.length - 1}}
+                  {{filterForm.get('division').value?.length === 2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option (onSelectionChange)="toggleAllSelection($event.source._selected,'division')" value='all'>All
+              </mat-option>
+              <mat-option *ngFor="let division of division" [value]="division.dvcode">{{division.division |
+                titlecase}}
+                &nbsp; ({{division.code}}) &nbsp; <strong>{{division.dvcode }}</strong></mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!--category -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix class="mat-icons">opacity</mat-icon>
+            <mat-select placeholder="Category" formControlName="category">
+              <mat-select-trigger>
+                {{filterForm.get('category').value}}
+                <span *ngIf="filterForm.get('category').value" class="others">
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let c of category | category :  filterForm.get('division').value"
+                [value]="c.category">{{c?.category
+                | titlecase}}
+                &nbsp; ({{c?.code}})</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!-- Subcategory1 -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix class="mat-icons">whatshot</mat-icon>
+            <mat-select placeholder="Category 2" formControlName="subcategory1">
+              <mat-select-trigger>
+                {{filterForm.get('subcategory1').value}}
+                <span *ngIf="filterForm.get('subcategory1').value" class="others">
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let s1 of subcategory1 | subcategory1 : filterForm.get('category').value"
+                [value]="s1.subcategory1">{{s1?.subcategory1
+                | titlecase}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!-- Subcategory 2 -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix class="mat-icons">ac_unit</mat-icon>
+            <mat-select placeholder="category 3" formControlName="subcategory2">
+              <mat-select-trigger>
+                {{filterForm.get('subcategory2').value}}
+                <span *ngIf="filterForm.get('subcategory2').value" class="others">
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let s2 of subcategory2 | subcategory2 : filterForm.get('subcategory1').value"
+                [value]="s2.subcategory2">{{s2?.subcategory2
+                | titlecase}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+    <br><br>
+    <!-- Load And Export -->
+    <div fxLayout fxLayoutGap="2rem">
+      <button mat-raised-button color="accent" (click)=" loadProducts()" class="button">
+        <mat-icon>autorenew</mat-icon>&nbsp;<span><strong>Load</strong></span>
+      </button>
+      <button mat-raised-button color="accent" class="button export" (click)="exportAsExcel()" [disabled]="!products">
+        <mat-icon>open_in_new</mat-icon>&nbsp;<span><strong>Export</strong></span>
+      </button>
+    </div>
+  </mat-card>
+</div>
+<br>
+<!-- Upload products section -->
+<mat-card *ngIf="showUpload">
+  <mat-card-header>
+    <mat-card-title>
+      <h3>Upload Products</h3>
+    </mat-card-title>
+  </mat-card-header>
+  <br>
+  <div fxLayout fxLayoutGap="3rem" fxLayoutAlign="start center">
+    <!-- File Upload for bulk upload products. -->
+    <td-file-upload [disabled]="!DownloadFormat" #singleFileUpload [(ngModel)]="file" (select)="selectEvent($event)"
+      (upload)="uploadEvent($event)" (cancel)="cancelEvent()" accept=".xlsx" defaultColor="accent" activeColor="primary"
+      cancelColor="warn" required>
+      <mat-icon>file_upload</mat-icon><span>{{ singleFileUpload.value?.name }}</span>
+      <ng-template td-file-input-label>
+        <mat-icon>attach_file</mat-icon>
+        <span>
+          Choose an excel file...
+          <span [hidden]="!singleFileUpload?.required">*</span>
+        </span>
+      </ng-template>
+    </td-file-upload>
+    <mat-progress-bar mode="determinate" [value]="progressValue" style="max-width:50%;height: 1rem;"></mat-progress-bar>
+  </div>
+  <br><br><br>
+  <div fxLayout fxLayoutGap="3rem" fxLayoutAlign="start center">
+    <button mat-fab (click)="showUpload=!showUpload" class="upload-back mat-elevation-z3">
+      <mat-icon aria-label="Example icon-button with a heart icon">navigate_before
+      </mat-icon>
+    </button>
+    <h5>{{error?.status}} &nbsp; {{error?.statusText}} &nbsp; &nbsp; {{error?.error.message}} &nbsp; &nbsp;
+      {{error?.error.data}} </h5>
+    <h5 class="note" *ngIf="!DownloadFormat">Note : First please download the format and upload strictliy
+      according to it.</h5>
+  </div>
+</mat-card>
+<br>
+<!-- Master Table -->
+<mat-card *ngIf="showTable">
+  <div fxLayout fxLayoutAlign="center center">
+    <mat-spinner *ngIf="!products" [diameter]="70"></mat-spinner>
+  </div>
+  <product-master-table [products]="products" *ngIf="products"></product-master-table>
+</mat-card>

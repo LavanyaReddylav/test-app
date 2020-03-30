@@ -1,0 +1,146 @@
+<br>
+<!-- Filters section -->
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <h2>Filters <mat-icon>layers</mat-icon>
+      </h2>
+    </mat-card-title>
+  </mat-card-header>
+  <form [formGroup]="filterForm">
+    <div fxLayout fxLayoutGap="1.4rem">
+
+      <!-- Sales Office -->
+      <div>
+        <mat-form-field>
+          <mat-icon matSuffix class="mat-icons">place</mat-icon>
+          <mat-select placeholder="Sales Office" formControlName="sales_office">
+            <mat-option *ngFor="let salesOffice of sales_office" [value]="[salesOffice]">{{salesOffice}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Division -->
+      <div *ngIf="filterForm.get('sales_office').valid && division.length>0">
+        <mat-form-field>
+          <mat-icon matSuffix class="mat-icons">toys</mat-icon>
+          <mat-select placeholder="Division" formControlName="division" multiple>
+            <mat-select-trigger>
+              {{filterForm.get('division').value ? filterForm.get('division').value[0] : ''}}
+              <span *ngIf="filterForm.get('division').value?.length > 1" class="others">
+                (+{{filterForm.get('division').value.length - 1}}
+                {{filterForm.get('division').value?.length === 2 ?
+                'other' :
+                'others'}})
+              </span>
+            </mat-select-trigger>
+            <mat-option (onSelectionChange)="toggleAllSelection($event.source._selected,'division')" value='all'>All
+            </mat-option>
+            <mat-option *ngFor="let division of division" [value]="division.dvcode">{{division.division |
+              titlecase}}
+              &nbsp; ({{division.code}}) &nbsp; <strong>{{division.dvcode}}</strong></mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Gtm Cities -->
+      <div *ngIf="filterForm.get('sales_office').valid">
+        <mat-form-field>
+          <mat-icon matSuffix class="mat-icons">location_city</mat-icon>
+          <mat-select placeholder="Gtm City" formControlName="gtm_city">
+            <mat-option *ngFor="let gtmCity of gtm_city | filter : filterForm.get('sales_office').value"
+              [value]="[gtmCity.name]">{{gtmCity.name
+              | titlecase}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Distribution Channel -->
+      <div *ngIf="filterForm.get('gtm_city').valid">
+        <mat-form-field>
+          <mat-icon matSuffix class="mat-icons">swap_calls</mat-icon>
+          <mat-select placeholder="Distribution Channel" formControlName="dc" multiple>
+            <mat-select-trigger>
+              {{filterForm.get('dc').value ? filterForm.get('dc').value[0] : ''}}
+              <span *ngIf="filterForm.get('division').value?.length > 1" class="others">
+                (+{{filterForm.get('dc').value.length - 1}} {{filterForm.get('dc').value?.length
+                === 2 ?
+                'other' :
+                'others'}})
+              </span>
+            </mat-select-trigger>
+            <mat-option *ngFor="let dc of dcList" [value]="dc.code">{{dc.name}} &nbsp; ({{dc.dc_code}})</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Select Users -->
+      <div *ngIf="filterForm.valid && userList.length>0">
+        <mat-form-field>
+          <mat-icon matSuffix class="mat-icons">record_voice_over</mat-icon>
+          <mat-select placeholder="Users" [formControl]="user" multiple>
+            <mat-select-trigger>
+              {{user.value ? user.value[0] : ''}}
+              <span *ngIf="user.value?.length > 1" class="others">
+                (+{{user.value.length - 1}}
+                {{user.value?.length === 2 ?
+                'other' :
+                'others'}})
+              </span>
+            </mat-select-trigger>
+            <mat-option (onSelectionChange)="toggleAllSelection($event.source._selected,'user')" value='all'>All
+            </mat-option>
+            <mat-option *ngFor="let u of userList" [value]="u.loginid">{{u.name | titlecase}}
+              &nbsp; <strong>{{u.loginid}}</strong>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <br><br>
+    </div>
+  </form>
+
+  <!-- Starting Date & Ending Date -->
+  <div fxLayout fxLayoutGap="1rem" *ngIf="user.valid">
+    <!--  starting date  -->
+    <div>
+      <mat-form-field>
+        <input matInput [matDatepicker]="picker1" placeholder="Starting date" [formControl]="starting_date">
+        <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+        <mat-datepicker #picker1 [disabled]="false"></mat-datepicker>
+      </mat-form-field>
+    </div>
+    <!--  ending date  -->
+    <div>
+      <mat-form-field>
+        <input matInput [matDatepicker]="picker2" placeholder="Ending date" [formControl]="ending_date">
+        <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+        <mat-datepicker #picker2 disabled="false"></mat-datepicker>
+      </mat-form-field>
+    </div>
+  </div>
+  <br>
+
+  <mat-progress-bar mode="indeterminate" *ngIf="loader"
+    style=" margin-left: 20rem; margin-top: 2rem; height:0.3rem; max-width: 70%;"></mat-progress-bar>
+
+  <!-- Errors -->
+  <div class="errors">
+    <h5 *ngFor="let err of errors"><i>{{err}}</i></h5>
+  </div>
+
+  <!--Load And Export-->
+  <div fxLayout fxLayoutGap="2rem" *ngIf="starting_date.valid && ending_date.valid">
+    <button *ngIf="!downloadReady" mat-raised-button color="accent" class="export" (click)="getLasmMapping(false)">
+      <mat-icon>open_in_new</mat-icon>&nbsp;<span><strong>Export</strong></span>
+    </button>
+    <button mat-raised-button color="accent" class="export" (click)="getLasmMapping(true)">
+      <mat-icon>assignment_turned_in</mat-icon>&nbsp;<span><strong>Scan And Validate</strong></span>
+    </button>
+    <button *ngIf="downloadReady" mat-raised-button color="primary" (click)="downloadReport()" class="export">
+      <mat-icon>arrow_downward</mat-icon>&nbsp;<span><strong>Report is Ready Click To Download</strong></span>
+    </button>
+  </div>
+</mat-card>
+<br>

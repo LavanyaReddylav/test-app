@@ -1,0 +1,105 @@
+<!-- Filters -->
+<br>
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <h2>Filters <mat-icon>layers</mat-icon>
+      </h2>
+    </mat-card-title>
+  </mat-card-header>
+  <form [formGroup]="filterForm">
+    <div fxLayout fxLayoutGap="1.2rem">
+      <!-- Division -->
+      <!-- Single division selection -->
+      <div>
+        <mat-form-field>
+          <mat-icon matSuffix class="mat-icons">toys</mat-icon>
+          <mat-select placeholder="Division" formControlName="division">
+            <mat-select-trigger>
+              {{filterForm.get('division').value }}
+              <span *ngIf="filterForm.get('division').value" class="others">
+              </span>
+            </mat-select-trigger>
+            <mat-option *ngFor="let division of divisionList" [value]="[division.dvcode]">{{division.division
+              | titlecase}}
+              &nbsp; ({{division.code}}) &nbsp; <strong>{{division.dvcode}}</strong></mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!-- Sales Office -->
+      <div>
+        <mat-form-field>
+          <mat-icon matSuffix class="mat-icons">place</mat-icon>
+          <mat-select placeholder="Sales Office" formControlName="sales_office">
+            <mat-select-trigger>
+              {{filterForm.get('sales_office').value}}
+              <span *ngIf="filterForm.get('sales_office').value" class="others">
+              </span>
+            </mat-select-trigger>
+            <mat-option *ngFor="let salesOffice of salesOfficeList" [value]="[salesOffice]">{{salesOffice}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!-- Gtm Cities -->
+      <div>
+        <mat-form-field>
+          <mat-icon matSuffix class="mat-icons">location_city</mat-icon>
+          <mat-select placeholder="Gtm City" formControlName="gtm_city" multiple>
+            <mat-select-trigger>
+              {{filterForm.get('gtm_city').value}}
+            </mat-select-trigger>
+            <mat-option (onSelectionChange)="toggleAllSelection($event.source._selected,'gtm_city')" value='all'>All
+            </mat-option>
+            <mat-option *ngFor="let gtmCity of gtm_city | filter : filterForm.get('sales_office').value"
+              [value]="gtmCity.name">{{gtmCity.name
+              |
+              titlecase}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!-- Distribution Channel -->
+      <div>
+        <mat-form-field>
+          <mat-icon matSuffix class="mat-icons">swap_calls</mat-icon>
+          <mat-select placeholder="Distribution Channel" formControlName="dc">
+            <mat-select-trigger>
+              {{filterForm.get('dc').value }}
+              <span *ngIf="filterForm.get('dc').value" class="others">
+              </span>
+            </mat-select-trigger>
+            <mat-option *ngFor="let dc of dcList" [value]="[dc.code]">{{dc.name}} &nbsp; ({{dc.dc_code}})</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <!--user status-->
+      <div>
+        <mat-form-field>
+          <mat-icon matSuffix class="mat-icons">device_hub</mat-icon>
+          <mat-select placeholder="User Status" formControlName="active">
+            <mat-option *ngFor="let user of userStatus" [value]="user.value">
+              {{user.viewValue}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <br>
+  </form>
+  <br>
+  <!--Load And Export-->
+  <div fxLayout fxLayoutGap="1rem">
+    <!-- <button mat-raised-button color="accent" (click)="getReport()">
+      <mat-icon>autorenew</mat-icon>&nbsp;<span><strong>Load</strong></span>
+    </button> -->
+    <button mat-raised-button color="accent" class="export" (click)="exportAsExcel()" [disabled]="!filterForm.valid">
+      <mat-icon>open_in_new</mat-icon>&nbsp;<span><strong>Export</strong></span>
+    </button>
+  </div>
+</mat-card>
+
+<br><br>
+<!-- show loader -->
+<div fxLayout fxLayoutAlign="center center" *ngIf="showLoader">
+  <mat-spinner [diameter]="60"></mat-spinner>
+</div>
+<br>

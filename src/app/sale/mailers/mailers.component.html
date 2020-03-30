@@ -1,0 +1,125 @@
+<br>
+<div class="sale-Mailers">
+  <br>
+  <!-- Filters -->
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <h2>Filters <mat-icon>layers</mat-icon>
+        </h2>
+      </mat-card-title>
+    </mat-card-header>
+    <form [formGroup]="mailForm">
+      <div fxLayout fxLayoutGap="1.4rem">
+        <!-- Division -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix class="mat-icons">toys</mat-icon>
+            <mat-select placeholder="Division" formControlName="division" multiple>
+              <mat-select-trigger>
+                {{mailForm.get('division').value ? mailForm.get('division').value[0] : ''}}
+                <span *ngIf="mailForm.get('division').value?.length > 1" class="others">
+                  (+{{mailForm.get('division').value.length - 1}}
+                  {{mailForm.get('division').value?.length === 2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option (onSelectionChange)="toggleAllSelection($event.source._selected,'division')" value='all'>All
+              </mat-option>
+              <mat-option *ngFor="let division of division" [value]="division.dvcode">{{division.division |
+                titlecase}}
+                &nbsp; ({{division.code}}) &nbsp; <strong>{{division.dvcode}}</strong></mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!-- Sales Office -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix class="mat-icons">place</mat-icon>
+            <mat-select placeholder="Sales Office" formControlName="sales_office" multiple>
+              <mat-select-trigger>
+                {{mailForm.get('sales_office').value ? mailForm.get('sales_office').value[0] : ''}}
+                <span *ngIf="mailForm.get('sales_office').value?.length > 1" class="others">
+                  (+{{mailForm.get('sales_office').value.length - 1}}
+                  {{mailForm.get('sales_office').value?.length === 2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option (onSelectionChange)="toggleAllSelection($event.source._selected,'sales_office')" value='all'>
+                All
+              </mat-option>
+              <mat-option *ngFor="let salesOffice of sales_office" [value]="salesOffice">{{salesOffice}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!-- Gtm Cities -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix class="mat-icons">location_city</mat-icon>
+            <mat-select placeholder="Gtm City" formControlName="gtm_city" multiple>
+              <mat-select-trigger>
+                {{mailForm.get('gtm_city').value ? mailForm.get('gtm_city').value[0] : ''}}
+                <span *ngIf="mailForm.get('gtm_city').value?.length > 1" class="others">
+                  (+{{mailForm.get('gtm_city').value.length - 1}}
+                  {{mailForm.get('gtm_city').value?.length === 2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option (onSelectionChange)="toggleAllSelection($event.source._selected,'gtm_city')" value='all'>All
+              </mat-option>
+              <mat-option *ngFor="let gtmCity of gtm_city | filter : mailForm.get('sales_office').value"
+                [value]="gtmCity.name">{{gtmCity.name
+                | titlecase}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!-- Distribution Channel -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix class="mat-icons">swap_calls</mat-icon>
+            <mat-select placeholder="Distribution Channel" formControlName="dc" multiple>
+              <mat-select-trigger>
+                {{mailForm.get('dc').value ? mailForm.get('dc').value[0] : ''}}
+                <span *ngIf="mailForm.get('division').value?.length > 1" class="others">
+                  (+{{mailForm.get('dc').value.length - 1}} {{mailForm.get('dc').value?.length
+                  === 2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let dc of dcList" [value]="dc.code">{{dc.name}} &nbsp; ({{dc.dc_code}})</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!--  starting date  -->
+        <div>
+          <mat-form-field>
+            <input matInput [matDatepicker]="picker1" placeholder="Starting date" formControlName="starting_date">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1 [disabled]="false"></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <!--  ending date  -->
+        <div>
+          <mat-form-field>
+            <input matInput [matDatepicker]="picker2" placeholder="Ending date" formControlName="ending_date">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2 disabled="false"></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <br><br>
+      </div>
+    </form>
+    <br><br>
+
+    <!-- Send Mailers -->
+    <div fxLayout fxLayoutGap="1rem">
+      <button id="sendMailers" mat-raised-button color="primary" (click)="sendMailers()">
+        <span><strong>Send Mailers</strong></span>&nbsp;<mat-icon>arrow_forward</mat-icon>
+      </button>
+    </div>
+  </mat-card>
+  <br>

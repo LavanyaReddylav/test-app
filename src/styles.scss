@@ -1,0 +1,16 @@
+/* You can add global styles to this file, and also import other style files */
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+// @import './styles/material.theme';
+@import '~ngx-toastr/toastr.css';
+
+$bg-color: #fafafa; //subtle grey.
+
+* {
+  font-family: 'Montserrat', sans-serif;
+}
+
+body {
+  background-color: $bg-color;
+  margin: 0;
+  // zoom:100%;
+}

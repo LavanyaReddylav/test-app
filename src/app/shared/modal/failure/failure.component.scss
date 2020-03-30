@@ -1,0 +1,292 @@
+.modalbox.failure {
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    margin-top: 2%;
+    background: #fff;
+    padding: 5px 5px;
+    // border: 1px solid #aaa;
+    text-align: center;
+  }
+  .modalbox.failure.animate .icon {
+    -webkit-animation: fall-in 0.75s;
+    -moz-animation: fall-in 0.75s;
+    -o-animation: fall-in 0.75s;
+    animation: fall-in 0.75s;
+  }
+  .modalbox.failure h1 {
+    font-family: 'Montserrat', sans-serif;
+  }
+  .modalbox.failure p{
+    font-family: 'Montserrat', sans-serif;
+  }
+  .modalbox.failure button {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    width: 100%;
+    background: #ff424f;
+    color: #fff;
+    border-color: #ff424f;
+    outline: none;
+    font-size: 1rem;
+    font-weight: bold;
+  }
+  
+  .modalbox.failure .icon {
+    position: relative;
+    margin: 0 auto;
+    margin-top: -75px;
+    background: #ff424f;
+    height: 75px;
+    width: 75px;
+    border-radius: 50%;
+  }
+  .modalbox.failure .icon span {
+    font-size: 4em;
+    color: #fff;
+    text-align: center;
+    padding-top: 20px;
+    margin-left: -20px;
+  }
+  
+  mat-icon{
+    font-size: 3rem;
+  }
+  
+  .center {
+    float: none;
+    margin-left: auto;
+    margin-right: auto;
+  /* stupid browser compat. smh */
+  }
+  .center .change {
+    display: block;
+    font-size: 10px;
+    color: #ccc;
+    margin-top: 10px;
+  }
+  @-webkit-keyframes fall-in {
+    0% {
+      -ms-transform: scale(3, 3);
+      -webkit-transform: scale(3, 3);
+      transform: scale(3, 3);
+      opacity: 0;
+    }
+    50% {
+      -ms-transform: scale(1, 1);
+      -webkit-transform: scale(1, 1);
+      transform: scale(1, 1);
+      opacity: 1;
+    }
+    60% {
+      -ms-transform: scale(1.1, 1.1);
+      -webkit-transform: scale(1.1, 1.1);
+      transform: scale(1.1, 1.1);
+    }
+    100% {
+      -ms-transform: scale(1, 1);
+      -webkit-transform: scale(1, 1);
+      transform: scale(1, 1);
+    }
+  }
+  @-moz-keyframes fall-in {
+    0% {
+      -ms-transform: scale(3, 3);
+      -webkit-transform: scale(3, 3);
+      transform: scale(3, 3);
+      opacity: 0;
+    }
+    50% {
+      -ms-transform: scale(1, 1);
+      -webkit-transform: scale(1, 1);
+      transform: scale(1, 1);
+      opacity: 1;
+    }
+    60% {
+      -ms-transform: scale(1.1, 1.1);
+      -webkit-transform: scale(1.1, 1.1);
+      transform: scale(1.1, 1.1);
+    }
+    100% {
+      -ms-transform: scale(1, 1);
+      -webkit-transform: scale(1, 1);
+      transform: scale(1, 1);
+    }
+  }
+  @-o-keyframes fall-in {
+    0% {
+      -ms-transform: scale(3, 3);
+      -webkit-transform: scale(3, 3);
+      transform: scale(3, 3);
+      opacity: 0;
+    }
+    50% {
+      -ms-transform: scale(1, 1);
+      -webkit-transform: scale(1, 1);
+      transform: scale(1, 1);
+      opacity: 1;
+    }
+    60% {
+      -ms-transform: scale(1.1, 1.1);
+      -webkit-transform: scale(1.1, 1.1);
+      transform: scale(1.1, 1.1);
+    }
+    100% {
+      -ms-transform: scale(1, 1);
+      -webkit-transform: scale(1, 1);
+      transform: scale(1, 1);
+    }
+  }
+  @-webkit-keyframes plunge {
+    0% {
+      margin-top: -100%;
+    }
+    100% {
+      margin-top: 25%;
+    }
+  }
+  @-moz-keyframes plunge {
+    0% {
+      margin-top: -100%;
+    }
+    100% {
+      margin-top: 25%;
+    }
+  }
+  @-o-keyframes plunge {
+    0% {
+      margin-top: -100%;
+    }
+    100% {
+      margin-top: 25%;
+    }
+  }
+  @-moz-keyframes fall-in {
+    0% {
+      -ms-transform: scale(3, 3);
+      -webkit-transform: scale(3, 3);
+      transform: scale(3, 3);
+      opacity: 0;
+    }
+    50% {
+      -ms-transform: scale(1, 1);
+      -webkit-transform: scale(1, 1);
+      transform: scale(1, 1);
+      opacity: 1;
+    }
+    60% {
+      -ms-transform: scale(1.1, 1.1);
+      -webkit-transform: scale(1.1, 1.1);
+      transform: scale(1.1, 1.1);
+    }
+    100% {
+      -ms-transform: scale(1, 1);
+      -webkit-transform: scale(1, 1);
+      transform: scale(1, 1);
+    }
+  }
+  @-webkit-keyframes fall-in {
+    0% {
+      -ms-transform: scale(3, 3);
+      -webkit-transform: scale(3, 3);
+      transform: scale(3, 3);
+      opacity: 0;
+    }
+    50% {
+      -ms-transform: scale(1, 1);
+      -webkit-transform: scale(1, 1);
+      transform: scale(1, 1);
+      opacity: 1;
+    }
+    60% {
+      -ms-transform: scale(1.1, 1.1);
+      -webkit-transform: scale(1.1, 1.1);
+      transform: scale(1.1, 1.1);
+    }
+    100% {
+      -ms-transform: scale(1, 1);
+      -webkit-transform: scale(1, 1);
+      transform: scale(1, 1);
+    }
+  }
+  @-o-keyframes fall-in {
+    0% {
+      -ms-transform: scale(3, 3);
+      -webkit-transform: scale(3, 3);
+      transform: scale(3, 3);
+      opacity: 0;
+    }
+    50% {
+      -ms-transform: scale(1, 1);
+      -webkit-transform: scale(1, 1);
+      transform: scale(1, 1);
+      opacity: 1;
+    }
+    60% {
+      -ms-transform: scale(1.1, 1.1);
+      -webkit-transform: scale(1.1, 1.1);
+      transform: scale(1.1, 1.1);
+    }
+    100% {
+      -ms-transform: scale(1, 1);
+      -webkit-transform: scale(1, 1);
+      transform: scale(1, 1);
+    }
+  }
+  @keyframes fall-in {
+    0% {
+      -ms-transform: scale(3, 3);
+      -webkit-transform: scale(3, 3);
+      transform: scale(3, 3);
+      opacity: 0;
+    }
+    50% {
+      -ms-transform: scale(1, 1);
+      -webkit-transform: scale(1, 1);
+      transform: scale(1, 1);
+      opacity: 1;
+    }
+    60% {
+      -ms-transform: scale(1.1, 1.1);
+      -webkit-transform: scale(1.1, 1.1);
+      transform: scale(1.1, 1.1);
+    }
+    100% {
+      -ms-transform: scale(1, 1);
+      -webkit-transform: scale(1, 1);
+      transform: scale(1, 1);
+    }
+  }
+  @-moz-keyframes plunge {
+    0% {
+      margin-top: -100%;
+    }
+    100% {
+      margin-top: 15%;
+    }
+  }
+  @-webkit-keyframes plunge {
+    0% {
+      margin-top: -100%;
+    }
+    100% {
+      margin-top: 15%;
+    }
+  }
+  @-o-keyframes plunge {
+    0% {
+      margin-top: -100%;
+    }
+    100% {
+      margin-top: 15%;
+    }
+  }
+  @keyframes plunge {
+    0% {
+      margin-top: -100%;
+    }
+    100% {
+      margin-top: 15%;
+    }
+  }
+  

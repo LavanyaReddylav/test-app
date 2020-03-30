@@ -1,0 +1,138 @@
+<br>
+<div class="attendace-summary">
+  <br>
+  <!-- Filters -->
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <h2>Filters <mat-icon>layers</mat-icon>
+        </h2>
+      </mat-card-title>
+    </mat-card-header>
+    <form [formGroup]="summaryForm">
+      <div fxLayout fxLayoutGap="1.4rem">
+        <!-- Division -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix class="mat-icons">toys</mat-icon>
+            <mat-select placeholder="Division" formControlName="division" multiple>
+              <mat-select-trigger>
+                {{summaryForm.get('division').value ? summaryForm.get('division').value[0] : ''}}
+                <span *ngIf="summaryForm.get('division').value?.length > 1" class="others">
+                  (+{{summaryForm.get('division').value.length - 1}}
+                  {{summaryForm.get('division').value?.length === 2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option (onSelectionChange)="toggleAllSelection($event.source._selected,'division')" value='all'>All
+              </mat-option>
+              <mat-option *ngFor="let division of division" [value]="division.dvcode">{{division.division |
+                titlecase}}
+                &nbsp; ({{division.code}}) &nbsp; <strong>{{division.dvcode}}</strong></mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!-- Sales Office -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix class="mat-icons">place</mat-icon>
+            <mat-select placeholder="Sales Office" formControlName="sales_office" multiple>
+              <mat-select-trigger>
+                {{summaryForm.get('sales_office').value ? summaryForm.get('sales_office').value[0] : ''}}
+                <span *ngIf="summaryForm.get('sales_office').value?.length > 1" class="others">
+                  (+{{summaryForm.get('sales_office').value.length - 1}}
+                  {{summaryForm.get('sales_office').value?.length === 2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option (onSelectionChange)="toggleAllSelection($event.source._selected,'sales_office')" value='all'>
+                All
+              </mat-option>
+              <mat-option *ngFor="let salesOffice of sales_office" [value]="salesOffice">{{salesOffice}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!-- Gtm Cities -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix class="mat-icons">location_city</mat-icon>
+            <mat-select placeholder="Gtm City" formControlName="gtm_city" multiple>
+              <mat-select-trigger>
+                {{summaryForm.get('gtm_city').value ? summaryForm.get('gtm_city').value[0] : ''}}
+                <span *ngIf="summaryForm.get('gtm_city').value?.length > 1" class="others">
+                  (+{{summaryForm.get('gtm_city').value.length - 1}}
+                  {{summaryForm.get('gtm_city').value?.length === 2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option (onSelectionChange)="toggleAllSelection($event.source._selected,'gtm_city')" value='all'>All
+              </mat-option>
+              <mat-option *ngFor="let gtmCity of gtm_city | filter : summaryForm.get('sales_office').value"
+                [value]="gtmCity.name">{{gtmCity.name
+                | titlecase}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!-- Distribution Channel -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix class="mat-icons">swap_calls</mat-icon>
+            <mat-select placeholder="Distribution Channel" formControlName="dc" multiple>
+              <mat-select-trigger>
+                {{summaryForm.get('dc').value ? summaryForm.get('dc').value[0] : ''}}
+                <span *ngIf="summaryForm.get('division').value?.length > 1" class="others">
+                  (+{{summaryForm.get('dc').value.length - 1}} {{summaryForm.get('dc').value?.length
+                  === 2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let dc of dcList" [value]="dc.code">{{dc.name}} &nbsp; ({{dc.dc_code}})</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!--  starting date  -->
+        <div>
+          <mat-form-field>
+            <input matInput [max]="maxDate" [matDatepicker]="picker1" placeholder="Starting date"
+              formControlName="starting_date">
+            <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+            <mat-datepicker #picker1 [disabled]="false"></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <!--  ending date  -->
+        <div>
+          <mat-form-field>
+            <input matInput [max]="maxDate" [matDatepicker]="picker2" placeholder="Ending date"
+              formControlName="ending_date">
+            <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2 disabled="false"></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <br><br>
+      </div>
+    </form>
+    <br><br>
+    <!--Load And Export-->
+    <div fxLayout fxLayoutGap="1rem">
+      <!-- <button mat-raised-button color="accent" (click)="loadSummaryReport()">
+        <mat-icon>autorenew</mat-icon>&nbsp;<span><strong>Load</strong></span>
+      </button> -->
+      <button mat-raised-button color="accent" class="export" (click)="exportAsExcel()" [disabled]="!summaryForm.valid">
+        <mat-icon>open_in_new</mat-icon>&nbsp;<span><strong>Export</strong></span>
+      </button>
+    </div>
+  </mat-card>
+  <br>
+  <!-- Table -->
+  <br><br>
+  <!-- show loader -->
+  <div fxLayout fxLayoutAlign="center center" *ngIf="showLoader">
+    <mat-spinner [diameter]="60"></mat-spinner>
+  </div>
+
+</div>
+<br>

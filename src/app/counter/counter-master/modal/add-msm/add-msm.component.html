@@ -1,0 +1,71 @@
+<div>
+  <h1 mat-dialog-title class="title">Add Must Sale Model</h1>
+  <mat-dialog-content style="height:400px;">
+    <!-- Add new MSM -->
+    <div fxLayout fxLayoutAlign="space-between">
+      <!-- Add SKU  -->
+      <div>
+        <button mat-fab class="add-button mat-elevation-z3" (click)="addSku()">
+          <mat-icon>add </mat-icon>
+        </button>
+      </div>
+      <!-- Select Date Range -->
+      <div fxLayout fxLayoutGap="3rem">
+        <!-- Start Date -->
+        <div>
+          <mat-form-field>
+            <input matInput [matDatepicker]="picker1" placeholder="Start Date" [(ngModel)]="start_date">
+            <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+          <button mat-raised-button mat-fab class="add-button mat-elevation-z3" (click)="picker1.open()">
+            <mat-icon>today</mat-icon>
+          </button>
+        </div>
+        <!-- End date -->
+        <div>
+          <mat-form-field>
+            <input matInput [matDatepicker]="picker2" placeholder="End Date" [(ngModel)]="end_date">
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+          <button mat-raised-button mat-fab class="add-button mat-elevation-z3" (click)="picker2.open()">
+            <mat-icon>today</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    <br><br>
+    <!-- Show Added MSM SKUS ALong with Targets-->
+    <div class="skus">
+      <mat-list>
+        <mat-list-item>
+          SKUS
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <td-virtual-scroll-container #virtualScroll [style.height.px]="400" [data]="skus">
+          <ng-template let-row="row" let-index="index" let-last="last" tdVirtualScrollRow>
+            <mat-list-item>
+              <div fxLayout fxLayoutAlign="space-between" style="min-width:100%">
+                <div matLine fxLayout fxLayoutGap="1rem" fxLayoutAlign="start center">
+                  <span>{{row.sku_code}}</span><span>{{row.sku}}</span><span>{{row.division}}</span><span>{{row.subcategory1}}</span><span>{{row.client_dv_code}}</span>
+                </div>
+                <div fxLayout fxLayoutGap="0.5rem">
+                  <button mat-raised-button mat-mini-fab class="delete-button mat-elevation-z3" (click)="remove(index);refresh()">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                  <mat-form-field>
+                    <input matInput type="number" placeholder="Target Quantity" value="0" [(ngModel)]="row.target_quantity">
+                  </mat-form-field>
+                </div>
+              </div>
+            </mat-list-item>
+            <mat-divider *ngIf="!last" [inset]="true"></mat-divider>
+          </ng-template>
+        </td-virtual-scroll-container>
+      </mat-list>
+    </div>
+  </mat-dialog-content>
+  <mat-dialog-actions fxLayout fxLayoutAlign="space-between">
+    <button mat-button color="accent" (click)="cancel(false)">Cancel</button>
+    <button mat-button color="primary" (click)="addMsm()">Add MSM</button>
+  </mat-dialog-actions>
+</div>

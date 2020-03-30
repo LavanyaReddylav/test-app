@@ -1,0 +1,25 @@
+//interface for the Counter Table
+export interface CounterData {
+    active: boolean,
+    address: {},
+    closing_time: Date,
+    counter_class: string,
+    dc: [string],
+    distributor: [string],
+    distributors: [string],
+    division: [string],
+    gst_number: string,
+    gtm_city: string,
+    image: [string],
+    inserted_at: {},
+    name: string,
+    opening_time: Date,
+    pan_number: string,
+    sales_office: string,
+    sap_code: number,
+    updated_by: [string],
+    updated_on: [Date],
+    weekly_off: string,
+    __v: number,
+    _id: string
+}

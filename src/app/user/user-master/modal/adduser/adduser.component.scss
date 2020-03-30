@@ -1,0 +1,17 @@
+$text-color: rgb(148, 144, 144); //text color grey
+
+mat-icon{
+    color: $text-color;
+}
+
+mat-select{
+    font-size: 0.8rem;
+}
+.others{
+    font-size: 0.8rem;
+} 
+
+mat-form-field{
+    max-width: 10rem;
+    font-size: 0.9rem;
+}

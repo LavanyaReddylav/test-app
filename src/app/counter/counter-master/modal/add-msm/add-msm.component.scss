@@ -1,0 +1,49 @@
+$text-color: rgb(148, 144, 144); //text color grey.
+$primary: #3F51B5; // primary color
+$accent: #E91E63; // accent color.
+$primary-dark: #1A237E; //primary-dark
+
+.title {
+  color: $primary;
+  font-size: 1.2rem;
+}
+
+mat-dialog-actions button {
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.add-button {
+  background-color: white !important;
+  color: $primary;
+  font-size: 1.5rem;
+}
+
+.delete-button {
+  background-color: white !important;
+  font-size: 1.5rem;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+.skus {
+
+  span {
+    font-size: 0.8rem;
+    color: $primary;
+    font-weight: 600;
+    word-break: keep-all;
+  }
+
+  mat-icon {
+    color: $primary;
+  }
+
+  mat-form-field {
+    max-width: 7.5rem;
+    font-size: 0.8rem;
+  }
+
+}

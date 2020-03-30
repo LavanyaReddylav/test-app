@@ -1,0 +1,121 @@
+<div *ngIf="!showSpinner">
+  <div class="mat-card-title">
+    <h5 mat-dialog-title>Add New Beat</h5>
+  </div>
+
+  <mat-dialog-content>
+    <form [formGroup]="beatForm">
+      <div fxLayout fxLayoutGap="1rem">
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix>explore</mat-icon>
+            <input matInput placeholder="Beat Name" formControlName="name">
+            <!-- <mat-icon matSuffix>explore</mat-icon> -->
+            <button mat-button *ngIf="beatForm.get('name').value" matSuffix mat-icon-button
+              (click)="beatForm.get('name').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-error *ngIf="beatForm.get('name').hasError('required')">
+              Beat name is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- Division -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix>toys</mat-icon>
+            <mat-select placeholder="Division" formControlName="division" multiple>
+              <mat-select-trigger>
+                {{beatForm.get('division').value ? beatForm.get('division').value[0] : ''}}
+                <span *ngIf="beatForm.get('division').value?.length > 1" class="others">
+                  (+{{beatForm.get('division').value.length - 1}} {{beatForm.get('division').value?.length === 2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let division of divisionList" [value]="division.dvcode">{{division.division
+                |titlecase}}
+                &nbsp; ({{division.code}}) &nbsp; <strong>{{division.dvcode}}</strong></mat-option>
+            </mat-select>
+            <mat-error *ngIf="beatForm.get('division').hasError('required')">
+              Division is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxLayout fxLayoutGap="1rem">
+        <!-- salesOffice -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix>place</mat-icon>
+            <mat-select placeholder="Sales Office" formControlName="sales_office">
+              <!-- <mat-select-trigger>
+                {{beatForm.get('sales_office').value ? beatForm.get('sales_office').value[0] : ''}}
+                <span *ngIf="beatForm.get('sales_office').value?.length > 1" class="others">
+                  (+{{beatForm.get('sales_office').value.length - 1}} {{beatForm.get('sales_office').value?.length ===
+                  2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger> -->
+              <mat-option *ngFor="let salesOffice of salesOfficeList" [value]="salesOffice">{{salesOffice}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="beatForm.get('sales_office').hasError('required')">
+              Sales Office is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- Gtm Cities -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix class="mat-icons">location_city</mat-icon>
+            <mat-select placeholder="Gtm City" formControlName="gtm_city">
+              <!-- <mat-select-trigger>
+                {{beatForm.get('gtm_city').value ? beatForm.get('gtm_city').value[0] : ''}}
+                <span *ngIf="beatForm.get('gtm_city').value?.length > 1" class="others">
+                  (+{{beatForm.get('gtm_city').value.length - 1}}
+                  {{beatForm.get('gtm_city').value?.length === 2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger> -->
+              <mat-option *ngFor="let gtmCity of gtmCityList | filter : beatForm.get('sales_office').value"
+                [value]="gtmCity.name">{{gtmCity.name
+                | titlecase}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+      <div fxLayout fxLayoutGap="1rem">
+        <!-- distribution channel -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix>swap_calls</mat-icon>
+            <mat-select placeholder="DC" formControlName="dc" multiple>
+              <mat-option *ngFor="let dc of dcs" [value]="dc.code">
+                {{dc.name}} &nbsp; ({{dc.dc_code}})
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="beatForm.get('dc').hasError('required')">
+              DC is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <div fxLayout>
+      <button mat-button color="accent" [mat-dialog-close]>
+        <span><strong>Cancel</strong></span>
+      </button>
+      <button mat-button color="primary" (click)="addBeat()" [disabled]="!beatForm.valid">
+        <span><strong>Add Beat</strong></span>
+      </button>
+    </div>
+  </mat-dialog-actions>
+</div>
+<div fxLayout fxLayoutAlign="center center">
+  <mat-spinner *ngIf="showSpinner" [diameter]="100"></mat-spinner>
+</div>

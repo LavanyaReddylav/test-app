@@ -1,0 +1,80 @@
+$text-color: rgb(148, 144, 144); //text color grey
+$primary: #3F51B5;// primary color.
+$accent:  #E91E63;// accent color.
+$warn:    #f44336;//warn color.
+
+
+
+#login-img{
+    background-image: url('../../../assets/images/login1.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 400px;
+    height: 400px;
+     & p {
+        color: $text-color;
+        font-size: 0.7rem;
+        max-width: 13rem;
+        padding: 1rem;
+        margin-top: 7rem;
+        font-weight: bold;
+    }
+ }
+
+ #login-form{
+    width: 400px;
+    height: 400px;
+ }
+
+ #signin-title h3{
+     color: $accent;
+     font-size: 1.1rem;
+     font-weight: bold;
+ }
+
+ #invalid-credential{
+    color: $warn;
+    font-size: 0.8rem;
+    font-weight: bold;
+ }
+
+ #invalid-loginid{
+    color: $warn;
+    font-size: 0.8rem;
+    font-weight: bold;
+ }
+ 
+ #forgot-password{
+    color: $primary;
+    font-size: 0.8rem !important;
+    font-weight: bold;
+    & h5 {cursor: pointer;} 
+}
+
+ mat-card{
+    width: 300px;
+    height: 300px;
+    border-radius: 5px;
+}
+
+mat-icon{
+    color: $primary;
+}
+
+mat-form-field{
+    max-width: 13rem;
+    font-size: 0.9rem;
+    color: $primary;
+    font-weight: bold;
+}
+
+#signin-button{
+    width: 100%;
+    color: white;
+    font-weight: bold;
+    top: 2rem;
+}
+#signin-button:disabled{
+    background-color: lighten($color: $primary, $amount: 25%) !important;
+    color: white !important;
+}

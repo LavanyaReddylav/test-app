@@ -1,0 +1,35 @@
+<mat-accordion class="panel">
+  <mat-expansion-panel *ngFor="let msm of msms;let i = index" [expanded]="step === i" (opened)="setStep(i)">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Sales Office : {{msm.sales_office}}
+      </mat-panel-title>
+      <mat-panel-title>
+        Division : {{msm.division}}
+      </mat-panel-title>
+      <mat-panel-title>
+        Category : {{msm.msm_category}}
+      </mat-panel-title>
+      <mat-panel-title>
+        Starting Date : {{msm.start_date |date: 'dd/MM/yyyy'}}
+      </mat-panel-title>
+      <mat-panel-title>
+        Ending Date : {{msm.end_date |date: 'dd/MM/yyyy'}}
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <div class="squares">
+      <!-- <mat-progress-bar mode="indeterminate" *ngIf="!msms?.length" style=" margin-left: 10rem; margin-top: 2rem; height:0.3rem; max-width: 70%;"></mat-progress-bar> -->
+      <!-- <mat-spinner *ngIf="!msms"></mat-spinner> -->
+      <div class="mat-elevation-z1" *ngFor="let m of msm.msm">
+        <span><b>SKU Code : {{m.sku}}</b></span>
+        <p>Target Quantity : {{m.target_quantity}}</p>
+      </div>
+    </div>
+
+    <mat-action-row>
+      <button mat-button color="primary" (click)="prevStep()">Prev</button>
+      <button mat-button color="primary" (click)="nextStep()">Next</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>

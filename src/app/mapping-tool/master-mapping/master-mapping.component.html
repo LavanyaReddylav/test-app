@@ -1,0 +1,203 @@
+<br>
+<!-- Filters section -->
+<mat-card>
+  <h2 class="card-title">Selection Filters</h2>
+  <form [formGroup]="filterForm">
+    <div fxLayout fxLayoutGap="1.4rem">
+
+      <!-- Sales Office -->
+      <div>
+        <mat-form-field style="width: 10rem;">
+          <mat-icon matSuffix class="mat-icons">place</mat-icon>
+          <mat-select placeholder="Sales Office" formControlName="sales_office">
+            <mat-option *ngFor="let salesOffice of sales_office" [value]="[salesOffice]">{{salesOffice}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Division -->
+      <div>
+        <mat-form-field>
+          <mat-icon matSuffix class="mat-icons">toys</mat-icon>
+          <mat-select placeholder="Division" formControlName="division">
+            <mat-option *ngFor="let division of division"
+              [value]="division.dvcode=='all'?['fans', 'ecofans', 'cfc', 'iron', 'hc', 'lighting', 'ac & r', 'wh']:[division.dvcode]">{{division.division |
+              titlecase}}
+              &nbsp; ({{division.code}}) &nbsp; <strong>{{division.dvcode}}</strong></mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Gtm Cities -->
+      <div>
+        <mat-form-field style="width: 10rem;">
+          <mat-icon matSuffix class="mat-icons">location_city</mat-icon>
+          <mat-select placeholder="Gtm City" formControlName="gtm_city">
+            <mat-option *ngFor="let gtmCity of gtm_city | filter : filterForm.get('sales_office').value"
+              [value]="[gtmCity.name]">{{gtmCity.name
+              | titlecase}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Distribution Channel -->
+      <div>
+        <mat-form-field>
+          <mat-icon matSuffix class="mat-icons">swap_calls</mat-icon>
+          <mat-select placeholder="Distribution Channel" formControlName="dc">
+            <mat-option *ngFor="let dc of dcList" [value]="[dc.code]">{{dc.name}} &nbsp; ({{dc.dc_code}})</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+      <!-- Distributor -->
+      <div *ngIf="filterForm.valid">
+        <mat-form-field>
+          <mat-icon matSuffix class="mat-icons">record_voice_over</mat-icon>
+          <mat-select placeholder="Distributor" [formControl]="distributor" #distributorSelect>
+            <mat-option>
+              <ngx-mat-select-search placeholderLabel="Search" noEntriesFoundLabel="No Record Found!"
+                showToggleAllCheckbox="true" [formControl]="distributorFilterCtrl"></ngx-mat-select-search>
+            </mat-option>
+            <mat-option *ngFor="let dist of filteredDistributors | async" [value]="dist.sap_code">
+              {{dist.name | titlecase}}
+              &nbsp; <strong>{{dist.sap_code}}</strong>
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+      <br><br>
+    </div>
+  </form>
+
+  <br>
+
+  <mat-progress-bar mode="indeterminate" *ngIf="loader"
+    style=" margin-left: 10rem; margin-top: 2rem; height:0.3rem; max-width: 70%;"></mat-progress-bar>
+
+  <!-- Errors -->
+  <div class="errors">
+    <h5 *ngFor="let err of errors"><i>{{err}}</i></h5>
+  </div>
+
+</mat-card>
+<br><br>
+
+<!-- Data Selection -->
+<mat-card class="data-selection" *ngIf="distributor.dirty">
+  <h2 class="card-title">Data Selection</h2>
+
+  <div fxLayout fxLayoutGap="3rem" fxLayoutAlign="start center">
+
+    <!-- Users -->
+    <div>
+      <mat-form-field>
+        <mat-icon matSuffix class="mat-icons">account_circle</mat-icon>
+        <mat-select placeholder="Select User" [formControl]="user">
+          <mat-option>
+            <ngx-mat-select-search placeholderLabel="Search User" noEntriesFoundLabel="No Record Found!"
+              showToggleAllCheckbox="true" [formControl]="userFilterCtrl"></ngx-mat-select-search>
+          </mat-option>
+          <mat-option *ngFor="let user of filteredUsers | async" [value]="user.loginid">{{user.name | titlecase}}
+            &nbsp; <strong>{{user.loginid}}</strong>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Beats -->
+    <div>
+      <mat-form-field>
+        <mat-icon matSuffix class="mat-icons">explore</mat-icon>
+        <mat-select placeholder="Select Beat" [formControl]="beat">
+          <mat-option>
+            <ngx-mat-select-search placeholderLabel="Search Beat" noEntriesFoundLabel="No Record Found!"
+              showToggleAllCheckbox="true" [formControl]="beatFilterCtrl"></ngx-mat-select-search>
+          </mat-option>
+          <mat-option *ngFor="let beat of filteredBeats | async" [value]="beat" [ngClass]="{'mapped': beat.mapped}">
+            {{beat.name | titlecase}}
+            <!-- &nbsp; <strong>{{beat.code}}</strong> -->
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Counters -->
+    <div>
+      <mat-form-field>
+        <mat-icon matSuffix class="mat-icons">store</mat-icon>
+        <mat-select placeholder="Select Counters" [formControl]="counter" multiple>
+          <mat-select-trigger>
+            {{counter.value ? counter.value[0] : ''}}
+            <span *ngIf="counter.value?.length > 1" class="others">
+              (+{{counter.value.length - 1}}
+              {{counter.value?.length === 2 ?
+                  'other' :
+                  'others'}})
+            </span>
+          </mat-select-trigger>
+          <ngx-mat-select-search placeholderLabel="Search Counter" noEntriesFoundLabel="No Counter Found!"
+            [showToggleAllCheckbox]="true" (toggleAll)="toggleSelectAll($event)" [formControl]="counterFilterCtrl">
+          </ngx-mat-select-search>
+          <mat-option *ngFor="let counter of filteredCounters | async"
+            (onSelectionChange)="counterSelectionChange($event)" [value]="counter.basic_details.sap_code">
+            <strong>{{counter.basic_details.sap_code}}</strong> &nbsp; {{counter.basic_details.name | titlecase}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Apply Mapping -->
+    <div class="apply-mapping">
+      <button mat-raised-button color="accent" (click)="applyMapping()">Apply Mapping</button>
+    </div>
+
+  </div>
+
+  <br>
+
+
+  <div *ngIf="user.dirty && beat.dirty" fxLayout fxLayoutGap="3rem" fxLayoutAlign="start center">
+    <!-- Month Selector -->
+    <div>
+      <mat-form-field>
+        <mat-icon matSuffix class="mat-icons">swap_calls</mat-icon>
+        <mat-select placeholder="Select Month" [formControl]="month">
+          <mat-option *ngFor="let month of monthList" [value]="month.value">{{month.viewValue | titlecase}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <!-- Date Selector -->
+    <div>
+      <mat-form-field>
+        <mat-icon matSuffix class="mat-icons">swap_calls</mat-icon>
+        <mat-select placeholder="Select Dates" [formControl]="dates" multiple="true">
+          <mat-option (onSelectionChange)="toggleAllSelection($event.source._selected,'dates')" value='all'>All
+          </mat-option>
+          <mat-option *ngFor="let date of dateList" [value]="date">{{date |date:'dd-MMM-yyyy'}}
+            &nbsp; &nbsp; <i>{{date |date:'EEEE'}}</i>
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+  </div>
+
+  <br>
+
+  <!-- RESET BUTTON -->
+  <div>
+    <button mat-button color="primary" (click)="reset()" style="font-weight: bold;">Reset</button>
+  </div>
+
+
+  <!-- Updates -->
+  <div>
+    <h5 class="note" *ngFor="let update of updates" fxLayoutAlign="start center">
+      <mat-icon matSuffix>priority_high</mat-icon> <i>{{update}}</i>
+    </h5>
+  </div>
+
+</mat-card>
+<br><br>

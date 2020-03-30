@@ -1,0 +1,194 @@
+<div *ngIf="!showSpinner">
+  <h2 mat-dialog-title>Add New Distributor
+  </h2>
+  <mat-dialog-content>
+    <form [formGroup]="distributorForm">
+      <div class="form-group" fxLayout fxLayoutGap="2rem">
+        <!-- Active  -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix>portrait</mat-icon>
+            <mat-select placeholder="Active" formControlName="active">
+              <mat-option *ngFor="let active of activeRole" [value]="active.value">
+                {{active.viewValue}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="distributorForm.get('active').hasError('required')">
+              Active Role is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- username -->
+        <div>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Name" formControlName="name">
+            <mat-icon matSuffix>account_circle</mat-icon>
+            <button mat-button *ngIf="distributorForm.get('name').value" matSuffix mat-icon-button
+              (click)="distributorForm.get('name').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-error *ngIf="distributorForm.get('name').hasError('required')">
+              Name is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- mobile number -->
+        <div>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Mobile" formControlName="mobile" [errorStateMatcher]="matcher">
+            <mat-icon matSuffix>phone_iphone</mat-icon>
+            <button mat-button *ngIf="distributorForm.get('mobile').value" matSuffix mat-icon-button
+              (click)="distributorForm.get('mobile').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-error *ngIf="distributorForm.get('mobile').hasError('required')">
+              Mobile is <strong>required</strong>
+            </mat-error>
+            <mat-error
+              *ngIf="distributorForm.get('mobile').hasError('minlength') || distributorForm.get('mobile').hasError('maxlength')">
+              Mobile is not <strong>valid</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="form-group" fxLayout fxLayoutGap="2rem">
+        <!-- email -->
+        <div>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Email" formControlName="email" [errorStateMatcher]="matcher">
+            <mat-icon matSuffix>email</mat-icon>
+            <button mat-button *ngIf="distributorForm.get('email').value" matSuffix mat-icon-button
+              (click)="distributorForm.get('email').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-error *ngIf="distributorForm.get('email').hasError('required')">
+              Email is <strong>required</strong>
+            </mat-error>
+            <mat-error
+              *ngIf="distributorForm.get('email').hasError('email') && !distributorForm.get('email').hasError('required')">
+              Email is not <strong>valid</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- sales-office -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix>place</mat-icon>
+            <mat-select placeholder="Sales Office" formControlName="sales_office" multiple>
+              <mat-select-trigger>
+                {{distributorForm.get('sales_office').value ? distributorForm.get('sales_office').value[0] : ''}}
+                <span *ngIf="distributorForm.get('sales_office').value?.length > 1" class="others">
+                  (+{{distributorForm.get('sales_office').value.length - 1}}
+                  {{distributorForm.get('sales_office').value?.length ===
+                  2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let salesOffice of salesOfficeList" [value]="salesOffice">{{salesOffice}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="distributorForm.get('sales_office').hasError('required')">
+              Sales Office is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- gtm cities -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix>location_city</mat-icon>
+            <mat-select placeholder="Gtm City" formControlName="gtm_city" multiple>
+              <mat-select-trigger>
+                {{distributorForm.get('gtm_city').value ? distributorForm.get('gtm_city').value[0] : ''}}
+                <span *ngIf="distributorForm.get('gtm_city').value?.length > 1" class="others">
+                  (+{{distributorForm.get('gtm_city').value.length - 1}}
+                  {{distributorForm.get('gtm_city').value?.length === 2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let gtmCity of gtmCityList | filter : distributorForm.get('sales_office').value"
+                [value]="gtmCity.name">{{gtmCity.name
+                | titlecase}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="distributorForm.get('gtm_city').hasError('required')">
+              Gtm City is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="form-group" fxLayout fxLayoutGap="2rem">
+        <!-- divisions -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix>toys</mat-icon>
+            <mat-select placeholder="Division" formControlName="division" multiple>
+              <mat-select-trigger>
+                {{distributorForm.get('division').value ? distributorForm.get('division').value[0] : ''}}
+                <span *ngIf="distributorForm.get('division').value?.length > 1" class="others">
+                  (+{{distributorForm.get('division').value.length - 1}}
+                  {{distributorForm.get('division').value?.length === 2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let division of divisionList" [value]="division.dvcode">{{division.division |
+                titlecase }}
+                &nbsp; ({{division.code}}) &nbsp; <strong>{{division.dvcode}}</strong></mat-option>
+            </mat-select>
+            <mat-error *ngIf="distributorForm.get('division').hasError('required')">
+              Division is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- distribution channel -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix>swap_calls</mat-icon>
+            <mat-select placeholder="DC" formControlName="dc" multiple>
+              <mat-option *ngFor="let dc of dcs" [value]="dc.code">
+                {{dc.name}} &nbsp; ({{dc.dc_code}})
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="distributorForm.get('dc').hasError('required')">
+              DC is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- Sap Code -->
+        <div>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Sap Code" formControlName="sap_code" [errorStateMatcher]="matcher">
+            <mat-icon matSuffix>dialpad</mat-icon>
+            <button mat-button *ngIf="distributorForm.get('sap_code').value" matSuffix mat-icon-button
+              (click)="distributorForm.get('sap_code').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-error *ngIf="distributorForm.get('sap_code').hasError('required')">
+              Sap Code is <strong>required</strong>
+            </mat-error>
+            <mat-error
+              *ngIf="distributorForm.get('sap_code').hasError('minlength') || distributorForm.get('sap_code').hasError('maxlength')">
+              Sap Code is not <strong>valid</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="form-group" fxLayout fxLayoutGap="2rem">
+      </div>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <div fxLayout>
+      <button mat-button color="accent" [mat-dialog-close]>
+        <span><strong>Cancel</strong></span>
+      </button>
+      <button mat-button color="primary" [mat-dialog-close] (click)="addDistributor()"
+        [disabled]="!distributorForm.valid">
+        <span><strong>Add Distributor</strong></span>
+      </button>
+    </div>
+  </mat-dialog-actions>
+</div>
+<div fxLayout fxLayoutAlign="center center">
+  <mat-spinner *ngIf="showSpinner" [diameter]="100"></mat-spinner>
+</div>

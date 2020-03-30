@@ -1,0 +1,48 @@
+$text-color: rgb(148, 144, 144); //text color grey
+$primary: #3F51B5;// primary color.
+$warn:    #f44336;//warn color.
+$accent:  #E91E63;// accent color.
+
+.mat-icons{
+    color: $text-color;
+}
+mat-card{
+    max-width: 90%;
+}
+mat-select{
+    font-size: 0.8rem;
+}
+.others{
+    opacity: 0.75;
+    font-size: 0.75em;
+}
+
+mat-form-field{
+    max-width: 10rem;
+    font-size: 0.9rem;
+    font-weight: 700;
+}
+.counter-master{
+    & > div{
+        max-width: 94%;
+    }
+}
+
+.upload-back{
+    background-color: white !important;
+    color: $primary
+}
+h5{
+    color: $warn;
+    font-size: 0.8rem;
+    font-weight: bold;
+}
+.export:disabled{
+    background-color: lighten($color: $accent, $amount: 25%) !important;
+    color: white !important;
+}
+.note{
+    color: $text-color;
+    font-size: 0.8rem;
+    font-weight: bold;
+}

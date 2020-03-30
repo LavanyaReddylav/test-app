@@ -1,0 +1,301 @@
+<div *ngIf="!showSpinner">
+  <div class="mat-card-title">
+    <h5 mat-dialog-title>Add New Counter
+    </h5>
+  </div>
+  <mat-dialog-content>
+    <form [formGroup]="counterForm">
+      <div class="form-group" fxLayout fxLayoutGap="2rem">
+        <!-- Counter Name -->
+        <div>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Name" formControlName="name">
+            <mat-icon matSuffix>store</mat-icon>
+            <button mat-button *ngIf="counterForm.get('name').value" matSuffix mat-icon-button
+              (click)="counterForm.get('name').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-error *ngIf="counterForm.get('name').hasError('required')">
+              Name is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- Sap Code -->
+        <div>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Sap Code" formControlName="sap_code" [errorStateMatcher]="matcher">
+            <mat-icon matSuffix>dialpad</mat-icon>
+            <button mat-button *ngIf="counterForm.get('sap_code').value" matSuffix mat-icon-button
+              (click)="counterForm.get('sap_code').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-error *ngIf="counterForm.get('sap_code').hasError('required')">
+              Sap Code is <strong>required</strong>
+            </mat-error>
+            <mat-error
+              *ngIf="counterForm.get('sap_code').hasError('minlength') || counterForm.get('sap_code').hasError('maxlength')">
+              Sap Code is not <strong>valid</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- PAN Number -->
+        <div>
+          <mat-form-field>
+            <input matInput type="text" placeholder="PAN Number" formControlName="pan_number"
+              [errorStateMatcher]="matcher">
+            <mat-icon matSuffix>chrome_reader_mode</mat-icon>
+            <button mat-button *ngIf="counterForm.get('pan_number').value" matSuffix mat-icon-button
+              (click)="counterForm.get('pan_number').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <!-- <mat-error *ngIf="counterForm.get('pan_number').hasError('required')">
+              PAN Number is <strong>required</strong>
+            </mat-error> -->
+            <mat-error
+              *ngIf="counterForm.get('pan_number').hasError('minlength') || counterForm.get('pan_number').hasError('maxlength')">
+              PAN Number is not <strong>valid</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="form-group" fxLayout fxLayoutGap="2rem">
+        <!-- GST Number -->
+        <div>
+          <mat-form-field>
+            <input matInput type="text" placeholder="GST Number" formControlName="gst_number"
+              [errorStateMatcher]="matcher">
+            <mat-icon matSuffix>chrome_reader_mode</mat-icon>
+            <button mat-button *ngIf="counterForm.get('gst_number').value" matSuffix mat-icon-button
+              (click)="counterForm.get('gst_number').setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <!-- <mat-error *ngIf="counterForm.get('gst_number').hasError('required')">
+              GST Number is <strong>required</strong>
+            </mat-error> -->
+            <mat-error
+              *ngIf="counterForm.get('gst_number').hasError('minlength') || counterForm.get('gst_number').hasError('maxlength')">
+              GST Number is not <strong>valid</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- Active Status -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix>verified_user</mat-icon>
+            <mat-select placeholder="Active Status" class="others" formControlName="active">
+              <mat-option *ngFor="let item of activeList" [value]="item.value">
+                {{item.viewValue}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="counterForm.get('active').hasError('required')">
+              Active Status is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- sales-office -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix>place</mat-icon>
+            <mat-select placeholder="Sales Office" formControlName="sales_office" multiple>
+              <mat-select-trigger>
+                {{counterForm.get('sales_office').value ? counterForm.get('sales_office').value[0] : ''}}
+                <span *ngIf="counterForm.get('sales_office').value?.length > 1" class="others">
+                  (+{{counterForm.get('sales_office').value.length - 1}}
+                  {{counterForm.get('sales_office').value?.length ===
+                  2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let salesOffice of salesOfficeList" [value]="salesOffice">{{salesOffice}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="counterForm.get('sales_office').hasError('required')">
+              Sales Office is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="form-group" fxLayout fxLayoutGap="2rem">
+        <!-- gtm cities -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix>location_city</mat-icon>
+            <mat-select placeholder="Gtm City" formControlName="gtm_city" multiple>
+              <mat-select-trigger>
+                {{counterForm.get('gtm_city').value ? counterForm.get('gtm_city').value[0] : ''}}
+                <span *ngIf="counterForm.get('gtm_city').value?.length > 1" class="others">
+                  (+{{counterForm.get('gtm_city').value.length - 1}}
+                  {{counterForm.get('gtm_city').value?.length === 2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let gtmCity of gtmCityList | filter : counterForm.get('sales_office').value"
+                [value]="gtmCity.name">{{gtmCity.name
+                | titlecase}}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="counterForm.get('gtm_city').hasError('required')">
+              Gtm City is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <!-- divisions -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix>toys</mat-icon>
+            <mat-select placeholder="Division" formControlName="division" multiple>
+              <mat-select-trigger>
+                {{counterForm.get('division').value ? counterForm.get('division').value[0] : ''}}
+                <span *ngIf="counterForm.get('division').value?.length > 1" class="others">
+                  (+{{counterForm.get('division').value.length - 1}} {{counterForm.get('division').value?.length === 2
+                  ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let division of divisionList" [value]="division.dvcode">{{division.division |
+                titlecase}}
+                &nbsp; ({{division.code}}) &nbsp; <strong>{{division.dvcode}}</strong></mat-option>
+            </mat-select>
+            <mat-error *ngIf="counterForm.get('division').hasError('required')">
+              Division is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- distribution channel -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix>swap_calls</mat-icon>
+            <mat-select placeholder="DC" formControlName="dc">
+              <mat-option *ngFor="let dc of dcs" [value]="dc.code">
+                {{dc.name}} &nbsp; ({{dc.dc_code}})
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="counterForm.get('dc').hasError('required')">
+              DC is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="form-group" fxLayout fxLayoutGap="2rem">
+        <!-- weekly off-->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix>weekend</mat-icon>
+            <mat-select placeholder="Weekly off" formControlName="weekly_off" multiple>
+              <mat-select-trigger>
+                {{counterForm.get('weekly_off').value ? counterForm.get('weekly_off').value[0] : ''}}
+                <span *ngIf="counterForm.get('weekly_off').value?.length > 1" class="others">
+                  (+{{counterForm.get('weekly_off').value.length - 1}} {{counterForm.get('weekly_off').value?.length
+                  === 2 ?
+                  'other' :
+                  'others'}})
+                </span>
+              </mat-select-trigger>
+              <mat-option *ngFor="let weeklyoffs of weeklyoffList" [value]="weeklyoffs">{{weeklyoffs | titlecase}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <!-- Opening Time -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix>schedule</mat-icon>
+            <input matInput [ngxTimepicker]="picker1" placeholder="Opening Time" formControlName="opening_time">
+            <ngx-material-timepicker #picker1></ngx-material-timepicker>
+            <mat-error *ngIf="counterForm.get('opening_time').hasError('required')">
+              Opening Time is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- Closing Time -->
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix>schedule</mat-icon>
+            <input matInput [ngxTimepicker]="picker2" placeholder="Closing Time" formControlName="closing_time">
+            <ngx-material-timepicker #picker2></ngx-material-timepicker>
+            <mat-error *ngIf="counterForm.get('closing_time').hasError('required')">
+              Closing Time is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <!-- Address -->
+      <div formGroupName="address" class="form-group" fxLayout fxLayoutGap="2rem">
+        <!-- SCO -->
+        <div>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Address" formControlName="address">
+            <mat-icon matSuffix>store</mat-icon>
+            <button mat-button *ngIf="counterForm.get(['address','address']).value" matSuffix mat-icon-button
+              (click)="counterForm.get(['address','address']).setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-error *ngIf="counterForm.get(['address','address']).hasError('required')">
+              Address is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- Locality -->
+        <div>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Locality" formControlName="locality">
+            <mat-icon matSuffix>location_on</mat-icon>
+            <button mat-button *ngIf="counterForm.get(['address','locality']).value" matSuffix mat-icon-button
+              (click)="counterForm.get(['address','locality']).setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-error *ngIf="counterForm.get(['address','locality']).hasError('required')">
+              Locality is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!-- Pincode -->
+        <div>
+          <mat-form-field>
+            <input matInput type="text" placeholder="Pincode" formControlName="pincode">
+            <mat-icon matSuffix>fiber_pin</mat-icon>
+            <button mat-button *ngIf="counterForm.get(['address','pincode']).value.value" matSuffix mat-icon-button
+              (click)="counterForm.get(['address','pincode']).setValue('')">
+              <mat-icon>close</mat-icon>
+            </button>
+            <mat-error *ngIf="counterForm.get(['address','pincode']).hasError('required')">
+              Pincode is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <!-- Counter Class -->
+      <div class="form-group" fxLayout fxLayoutGap="2rem">
+        <div>
+          <mat-form-field>
+            <mat-icon matSuffix>verified_user</mat-icon>
+            <mat-select placeholder="Class" class="others" formControlName="counter_class">
+              <mat-option *ngFor="let item of counterClassList" [value]="item.value">
+                {{item.viewValue}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="counterForm.get('counter_class').hasError('required')">
+              Counter class is <strong>required</strong>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <div fxLayout>
+      <button mat-button color="accent" [mat-dialog-close]>
+        <span><strong>Cancel</strong></span>
+      </button>
+      <button mat-button color="primary" (click)="addCounter()" [mat-dialog-close]="counterForm.value"
+        [disabled]="!counterForm.valid">
+        <span><strong>Add Counter</strong></span>
+      </button>
+    </div>
+  </mat-dialog-actions>
+</div>
+<div fxLayout fxLayoutAlign="center center">
+  <mat-spinner *ngIf="showSpinner" [diameter]="100"></mat-spinner>
+</div>

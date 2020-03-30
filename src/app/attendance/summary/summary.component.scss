@@ -1,0 +1,36 @@
+$text-color: rgb(148, 144, 144); //text color grey
+$accent: #E91E63; // accent color.
+
+.mat-icons {
+  color: $text-color;
+}
+
+mat-card {
+  max-width: 90%;
+}
+
+mat-select {
+  font-size: 0.8rem;
+}
+
+.others {
+  opacity: 0.75;
+  font-size: 0.75em;
+}
+
+mat-form-field {
+  max-width: 10rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
+.attendace-summary {
+  &>div {
+    max-width: 94%;
+  }
+}
+
+.export:disabled {
+  background-color: lighten($color: $accent, $amount: 25%) !important;
+  color: white !important;
+}

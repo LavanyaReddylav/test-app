@@ -1,0 +1,69 @@
+<br>
+<div class="beat-calendar">
+  <!-- Section 1 -->
+  <div fxLayout fxLayoutAlign="space-between" style="width:100%;">
+    <!-- Search Filter -->
+    <div>
+      <mat-form-field>
+        <input matInput [(ngModel)]="searchText" placeholder="Search User">
+        <mat-icon matSuffix>search</mat-icon>
+      </mat-form-field>
+      <br><br><br><br>
+      <!-- Control Area -->
+      <div *ngIf="calendar" fxLayout fxLayoutGap="3rem" class="control-area">
+        <!-- Refresh -->
+        <div>
+          <button mat-fab class="control-button mat-elevation-z3" (click)="refresh()">
+            <mat-icon aria-label="Example icon-button with a heart icon">refresh </mat-icon>
+          </button>
+        </div>
+        <!-- Month Navigator -->
+        <div fxLayout fxLayoutGap="1rem">
+          <button mat-fab class="control-button mat-elevation-z3" (click)="previousMonth()">
+            <mat-icon aria-label="Example icon-button with a heart icon">navigate_before </mat-icon>
+          </button>
+          <div fxLayout fxLayoutGap="0.4rem">
+            <h3>{{months[month]}}</h3>
+            <h3>{{year}}</h3>
+          </div>
+          <button mat-fab class="control-button mat-elevation-z3" (click)="nextMonth()">
+            <mat-icon aria-label="Example icon-button with a heart icon">navigate_next </mat-icon>
+          </button>
+        </div>
+        <!-- Add New Schedule -->
+        <div>
+          <button mat-fab class="control-button mat-elevation-z3" (click)="addSchedule()">
+            <mat-icon aria-label="Example icon-button with a heart icon">add </mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Users Area -->
+    <div class="user-area">
+      <mat-progress-bar *ngIf="!users" mode="indeterminate" style="margin-top: 2rem; height:0.3rem; max-width: 80%;">
+      </mat-progress-bar>
+      <div class="mat-elevation-z1" *ngFor="let user of users | search : searchText" (click)="getSchedules(user)">
+        <span>{{user.name|titlecase| truncate:[10]}}</span><br>
+        <b>{{user.loginid}}</b> &nbsp; <b>{{user.sales_office}}</b><br>
+        <i>{{user.gtm_city| truncate:[10]}}</i>&nbsp; <i>{{user.division| truncate:[7]}}</i><br>
+      </div>
+    </div>
+  </div>
+
+  <!-- Calendar -->
+  <br>
+  <div class="squares" *ngIf="calendar">
+    <mat-progress-bar mode="indeterminate" *ngIf="loader"
+      style=" margin-left: 10rem; margin-top: 2rem; height:0.3rem; max-width: 70%;"></mat-progress-bar>
+    <!-- <mat-spinner *ngIf="!schedules"></mat-spinner> -->
+    <div class="square mat-elevation-z1" *ngFor="let schedule of schedules"
+      [ngClass]="schedule.isShowing?'is-showing':'not-showing'" (click)="editSchedule(schedule)">
+      <span><b>{{schedule.date|date:'dd'}}</b></span>
+      &nbsp;&nbsp;<i>{{schedule.date|date:'EEEE'}}</i> <br> <br>
+      <p>{{schedule.beat| titlecase|truncate:[15]}}</p>
+    </div>
+  </div>
+  <!--squares ends-->
+
+</div>
+<br>

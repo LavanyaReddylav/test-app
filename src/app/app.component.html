@@ -1,0 +1,97 @@
+<!-- Main Page layout content -->
+<mat-toolbar color="primary" class="mat-elevation-z6">
+  <div id="logo-img" routerLink='/'></div>
+  <div id="logo" routerLink='/'>Infield Infotech</div>
+  <div fxFlex fxLayout fxLayoutAlign="flex-end">
+    <a routerLink='attendance' routerLinkActive="activated-item" mat-flat-button color="primary"
+      class="tb-item">Attendance</a>
+    <a routerLink='sale' routerLinkActive="activated-item" mat-flat-button color="primary" class="tb-item">Sale</a>
+    <a routerLink='mapping' routerLinkActive="activated-item" mat-flat-button color="primary" class="tb-item">Mapping
+      Tool</a>
+
+    <div class="user-account" fxLayout fxLayoutAlign="center center" [matMenuTriggerFor]="menu">
+      <mat-icon>account_circle</mat-icon>
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item class="mat-menu-item">
+          <mat-icon>account_circle</mat-icon>
+          <span>{{user}}</span>
+        </button>
+        <button mat-menu-item class="mat-menu-item" (click)="ChangePassword()">
+          <mat-icon>vpn_key</mat-icon>
+          <span>Change Password</span>
+        </button>
+        <button mat-menu-item class="mat-menu-item">
+          <mat-icon>settings</mat-icon>
+          <span>Settings</span>
+        </button>
+        <button mat-menu-item class="mat-menu-item" (click)="logoutUser()">
+          <mat-icon>power_settings_new</mat-icon>
+          <span>Logout</span>
+        </button>
+      </mat-menu>
+    </div>
+  </div>
+</mat-toolbar>
+<!-- <mat-progress-bar mode="indeterminate" value="40" color="primary"></mat-progress-bar> -->
+<mat-sidenav-container class="sidenav-container">
+
+  <mat-sidenav mode="side" fxHide.xs opened class="material-sidenav-left mat-elevation-z3" fixedInViewport
+    fixedTopGap="56" >
+    <mat-nav-list class="sidenav-list">
+      <a mat-list-item routerLink='dashboard' routerLinkActive="activated-link">
+        <mat-icon>offline_bolt
+        </mat-icon>
+        <span class="snav-caption">Dashboard</span>
+      </a>
+      <a mat-list-item routerLink='user' routerLinkActive="activated-link">
+        <mat-icon>account_circle</mat-icon>
+        <span class="snav-caption">User</span>
+      </a>
+      <a mat-list-item routerLink='counter' routerLinkActive="activated-link">
+        <mat-icon>store</mat-icon>
+        <span class="snav-caption">Counter</span>
+      </a>
+      <a mat-list-item routerLink='beat' routerLinkActive="activated-link">
+        <mat-icon>explore</mat-icon>
+        <span class="snav-caption">Beat</span>
+      </a>
+      <a mat-list-item routerLink='distributor' routerLinkActive="activated-link">
+        <mat-icon>person_pin</mat-icon>
+        <span class="snav-caption">Distributor</span>
+      </a>
+      <a mat-list-item routerLink='product' routerLinkActive="activated-link">
+        <mat-icon>widgets</mat-icon>
+        <span class="snav-caption">Product</span>
+      </a>
+      <a mat-list-item routerLink='msm' routerLinkActive="activated-link">
+        <mat-icon>shopping_basket</mat-icon>
+        <span class="snav-caption">MSM</span>
+      </a>
+      <a mat-list-item routerLink='ekyc' routerLinkActive="activated-link">
+        <mat-icon>assignment_turned_in</mat-icon>
+        <span class="snav-caption">EKYC</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
+
+  <mat-sidenav mode="side" position="end" opened="false" class="material-sidenav-right">
+    'Fixed' : Sidenav
+  </mat-sidenav>
+
+  <mat-sidenav-content class="sidenav-content">
+    <ngx-spinner bdColor="rgba(255,255,255,0.8)" size="medium" color="#3F51B5" type="line-scale">
+      <p style="font-size: 1rem; color: #3F51B5">Loading...</p>
+    </ngx-spinner>
+    <router-outlet></router-outlet>
+  </mat-sidenav-content>
+
+</mat-sidenav-container>
+
+<div class="fab" fxLayout fxLayoutAlign="end">
+  <button mat-fab color="primary" (click)="captureScreen()">
+    <mat-icon>camera_alt</mat-icon>
+  </button>
+</div>
+<!-- <mat-toolbar color="accent" class="toolbar-footer">
+  <span>Footer</span>
+</mat-toolbar> -->

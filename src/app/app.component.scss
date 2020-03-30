@@ -1,0 +1,155 @@
+  $primary: #3F51B5;// primary color
+  $accent:  #E91E63;// accent color.
+  $primary-dark: #1A237E; //primary-dark
+  $white: #fff; //white
+  $logo-color: #FFCC80; //light yellow
+  $bg-color: #fafafa; //subtle grey
+  $text-color: rgb(148, 144, 144); //text color grey
+
+  //Logo
+  #logo-img{
+    background-image: url('../assets/images/infield-logo.png');
+    width: 40px;
+    height: 40px;
+    background-size: 40px 40px;
+    &:hover{
+      cursor: pointer;
+    }
+  }
+
+  mat-toolbar{
+    max-height: 3.5rem;
+  }
+
+  #logo{
+    text-align: center;
+    color: $logo-color;
+    letter-spacing: 0.1rem;
+    font-weight: 600;
+    padding-left: .3rem;
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    & :hover{
+      cursor: pointer;
+    }
+  }
+
+  // Toolbar Items
+  .tb-item{
+    color: $white;
+    font-size: .8rem;
+    text-decoration: none;
+    text-align: center;
+    padding: .3rem 1rem;
+    border-radius: .2rem;
+    font-weight: 600;
+    letter-spacing: 1px;
+    &:hover{
+      background-color: darken($primary, 6%);
+      color: $bg-color;
+    }
+    &.activated-item{
+      background-color: darken($primary, 6%);
+      color: $bg-color;
+    }
+  }
+
+
+
+  //User Navigation Item.
+  .user-account{
+    padding: 0.3rem 1rem;
+    cursor: pointer;
+  }
+
+  //Toolbar Menu. 
+  .mat-menu-item{
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: $text-color;
+    & mat-icon{
+      font-size: 1.2rem;
+      color: $text-color;
+    }
+  }
+
+  // Sidenav Container
+  .sidenav-container {
+    position: absolute;
+    top: 4.1rem;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: -3;
+    background-color: $bg-color;
+  }
+ 
+  // Sidenav Content
+  .sidenav-content{
+    left: 3rem;
+  }
+
+  // Sidenav Left
+  .material-sidenav-left {
+    width: 11.5rem;
+    background-color: $white;
+    left: 1.5rem;
+    border-radius: 2px;
+   }
+  
+  .sidenav-list a{
+    color: $text-color;
+    padding-left: 0.7rem;
+  }
+
+  .snav-caption{
+    display:inline-block;
+    padding: 0 10px 0 10px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    }
+  
+  .activated-link{
+    border-left: 2px solid $primary;
+    color: $primary !important;
+  }  
+   
+  // Sidenav Right
+  .material-sidenav-right {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 180px;
+    background-color: $white;
+    height: 100%;
+    right: 20px;
+    border-radius: 2px;
+    box-shadow: 0 1px 1px 0.1px rgb(155, 155, 155);
+  }
+
+  // Header
+  .toolbar-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 2;
+  }
+  
+// Footer
+  .toolbar-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: -4;
+  }
+  
+.fab{
+    position: fixed;
+    bottom: 1rem;
+    right: 1rem; 
+    z-index:10;
+  }
+
+  
